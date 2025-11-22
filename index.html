@@ -160,10 +160,10 @@ background: linear-gradient(to right,
     flex-direction: column;
     transition: transform 0.5s ease;
   }
-/* Mobile-specific: remove hero glow */
+/* Disable hero glow animation on mobile */
 @media screen and (max-width: 768px) {
   .hero::before {
-    display: none; /* hides the glowing effect on mobile */
+    animation: none !important;
   }
 }
 
