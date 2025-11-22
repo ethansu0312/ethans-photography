@@ -160,10 +160,9 @@ background: linear-gradient(to right,
     flex-direction: column;
     transition: transform 0.5s ease;
   }
-/* Mobile updates */
 @media screen and (max-width: 768px) {
 
-  /* Glow touch area */
+  /* Make glow touchable */
   .hover-zone {
     display: block;
     position: fixed;
@@ -176,34 +175,35 @@ background: linear-gradient(to right,
     pointer-events: auto;
   }
 
-  /* Vertical menu initially hidden offscreen */
+  /* Vertical menu initially hidden offscreen on mobile */
   .vertical-menu {
     position: fixed;
-    left: -160px;
+    left: -160px; /* hidden offscreen */
     top: 0;
+    width: 100%;
+    background: transparent;
     flex-direction: column;
     align-items: flex-start;
-    background: transparent;
     padding: 0;
-    transition: left 0.4s ease;
+    transition: left 0.5s ease;
     z-index: 999;
   }
 
+  /* Slide in when open */
   .vertical-menu.open {
-    left: 0; /* slides in */
+    left: 0;
   }
 
-  /* Main menu items with equal spacing */
+  /* Main menu items spacing */
   .vertical-menu .menu-item {
     display: block;
     width: 100%;
     padding: 15px 0;
     font-size: 1.5rem;
     text-align: left;
-    box-sizing: border-box;
   }
 
-  /* Submenu stays the same */
+  /* Submenu unchanged */
   .submenu {
     max-height: 0;
     overflow: hidden;
@@ -308,23 +308,22 @@ verticalMenu.addEventListener('mouseenter', () => {
 verticalMenu.addEventListener('mouseleave', () => {
   hero.classList.remove('pause-glow');
 });
-// Mobile menu toggle + auto retract
 if (window.innerWidth <= 768) {
   const hoverZone = document.querySelector('.hover-zone');
   const verticalMenu = document.querySelector('.vertical-menu');
   const collectionsBtn = document.getElementById('collectionsBtn');
   const submenu = document.getElementById('submenu');
-  let retractTimeout;
+  let retractTimer;
 
-  // Tap glow to slide menu in/out
+  // Tap glow to open menu
   hoverZone.addEventListener('click', () => {
     verticalMenu.classList.add('open');
 
-    // Clear previous timer
-    if (retractTimeout) clearTimeout(retractTimeout);
+    // Clear previous timer if user taps again
+    if (retractTimer) clearTimeout(retractTimer);
 
     // Auto retract after 5 seconds
-    retractTimeout = setTimeout(() => {
+    retractTimer = setTimeout(() => {
       verticalMenu.classList.remove('open');
     }, 5000);
   });
