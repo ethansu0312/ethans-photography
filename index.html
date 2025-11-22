@@ -187,6 +187,17 @@
       text-align: center;
     }
   }
+/* Hide collections button on desktop, show on mobile */
+#collectionsBtn {
+  display: none; /* hidden by default */
+}
+
+@media screen and (max-width: 768px) {
+  #collectionsBtn {
+    display: block; /* visible on mobile */
+  }
+}
+
 </style>
 </head>
 <body>
