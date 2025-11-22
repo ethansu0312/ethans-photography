@@ -5,225 +5,196 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ethan's Photography</title>
 <style>
-/* Font integration */
-@font-face {
-  font-family: 'Gochi Hand';
-  src: url('GochiHand-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-body {
-  margin: 0;
-  background: #000;
-  color: #fff;
-  font-family: 'Gochi Hand', sans-serif;
-}
-
-.hero {
-  width: 100vw;
-  height: 100vh;
-  background: url('my-hero.jpg') center/cover no-repeat;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 60px;
-  height: 100%;
-  pointer-events: none;
-  background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 20%, transparent 100%);
-  z-index: 5;
-  animation: pulseGlow 3s infinite ease-in-out;
-}
-
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.05; }
-  50% { opacity: 0.4; }
-}
-
-.hero.pause-glow::before {
-  animation-play-state: paused !important;
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.25);
-  pointer-events: none;
-}
-
-/* Desktop Vertical menu */
-.vertical-menu {
-  position: fixed;
-  left: -160px;
-  top: calc(50% - 130px);
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  z-index: 100;
-  transition: left 0.4s ease;
-}
-
-/* Hover zone */
-.hover-zone {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 120px;
-  height: 100vh;
-  z-index: 50;
-}
-
-/* Menu links */
-.menu-item,
-.menu-item:link,
-.menu-item:visited,
-.menu-item:hover,
-.menu-item:active,
-.menu-item:focus {
-  text-decoration: none !important;
-  color: #fff !important;
-  padding: 20px 0;
-  font-size: 2rem;
-  transition: transform 0.2s, color 0.2s;
-  position: relative;
-}
-
-.menu-item:hover,
-.menu-item:focus,
-.menu-item:active {
-  transform: translateX(5px);
-  color: #ccc !important;
-  text-decoration: none !important;
-}
-
-/* Submenu */
-.submenu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s ease;
-}
-
-.submenu a,
-.submenu a:link,
-.submenu a:visited,
-.submenu a:hover,
-.submenu a:active,
-.submenu a:focus {
-  text-decoration: none !important;
-  color: #fff !important;
-  font-size: 1.5rem;
-  transition: transform 0.2s, color 0.2s;
-  min-width: 160px;
-}
-
-.submenu a:hover,
-.submenu a:focus,
-.submenu a:active {
-  transform: translateX(5px);
-  color: #aaa !important;
-  text-decoration: none !important;
-}
-
-/* Lower menu */
-.lower-menu {
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.5s ease;
-}
-
-/* Mobile responsiveness */
-@media screen and (max-width: 768px) {
-  /* Fullscreen sliding menu */
-  .vertical-menu {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 200px;
-    height: 100vh;
-    background: rgba(0,0,0,0.95);
-    transform: translateX(0);
-    flex-direction: column;
-    align-items: flex-start;
-    padding-top: 60px;
-    z-index: 200;
-    transition: left 0.3s ease;
+  /* Font integration */
+  @font-face {
+    font-family: 'Gochi Hand';
+    src: url('GochiHand-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
   }
 
-  .vertical-menu.active {
+  body {
+    margin: 0;
+    background: #000;
+    color: #fff;
+    font-family: 'Gochi Hand', sans-serif;
+  }
+
+  /* Hero section with glow overlay */
+  .hero {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: url('my-hero.jpg') center/cover no-repeat;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
     left: 0;
+    width: 60px;
+    height: 100%;
+    pointer-events: none;
+    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 20%, transparent 100%);
+    z-index: 5;
+    animation: pulseGlow 3s infinite ease-in-out;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 0.05; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero.pause-glow::before {
+    animation-play-state: paused !important;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.25);
+    pointer-events: none;
+  }
+
+  /* Desktop vertical menu */
+  .vertical-menu {
+    position: fixed;
+    left: -160px;
+    top: calc(50% - 130px);
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    transition: left 0.4s ease;
   }
 
   .hover-zone {
-    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 120px;
+    height: 100vh;
+    z-index: 50;
   }
 
-  .vertical-menu .menu-item {
-    padding: 15px 20px;
-    width: 100%;
-    font-size: 1.5rem;
-    text-align: left;
+  .menu-item,
+  .menu-item:link,
+  .menu-item:visited,
+  .menu-item:hover,
+  .menu-item:active,
+  .menu-item:focus {
+    text-decoration: none !important;
+    color: #fff !important;
+    padding: 20px 0;
+    font-size: 2rem;
+    transition: transform 0.2s, color 0.2s;
+    position: relative;
+  }
+
+  .menu-item:hover,
+  .menu-item:focus,
+  .menu-item:active {
+    transform: translateX(5px);
+    color: #ccc !important;
   }
 
   .submenu {
-    position: relative;
-    top: 0;
+    position: absolute;
+    top: 100%;
     left: 0;
-    max-height: none !important;
-    overflow: visible !important;
+    display: flex;
     flex-direction: column;
-    gap: 5px;
-    padding-left: 15px;
+    gap: 8px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
   }
 
   .submenu a {
-    font-size: 1.3rem;
-    padding: 8px 0;
-    width: 100%;
+    text-decoration: none !important;
+    color: #fff !important;
+    font-size: 1.5rem;
+    transition: transform 0.2s, color 0.2s;
+    min-width: 160px;
   }
 
-  /* Optional: make hero smaller to prevent overlay covering */
-  .hero::after {
-    background: rgba(0,0,0,0.15);
+  .submenu a:hover {
+    transform: translateX(5px);
+    color: #aaa !important;
   }
-}
+
+  .lower-menu {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.5s ease;
+  }
+
+  /* Mobile styles */
+  @media screen and (max-width: 768px) {
+    .hero::after {
+      display: none; /* remove black overlay on mobile */
+    }
+
+    .vertical-menu {
+      position: relative;
+      left: 0 !important;
+      top: 0 !important;
+      width: 100%;
+      transform: none !important;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0,0,0,0.95);
+      padding: 10px 0;
+      z-index: 1000;
+    }
+
+    .hover-zone {
+      display: none;
+    }
+
+    .menu-item {
+      width: 90%;
+      text-align: center;
+      padding: 15px 0;
+      font-size: 1.5rem;
+    }
+
+    /* Submenu hidden by default, shown on tap */
+    .submenu {
+      position: relative;
+      max-height: 0;
+      overflow: hidden;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .submenu.open {
+      max-height: 1000px; /* arbitrary large to reveal */
+      transition: max-height 0.5s ease;
+    }
+
+    .submenu a {
+      font-size: 1.3rem;
+      padding: 10px 0;
+      width: 100%;
+      text-align: center;
+    }
+  }
 </style>
 </head>
 <body>
 
-<!-- Mobile menu toggle button -->
-<button id="mobileMenuBtn" style="
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  z-index: 300;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid #fff;
-  color: #fff;
-  padding: 10px 15px;
-  font-size: 1.2rem;
-  border-radius: 5px;
-">Menu</button>
-
 <div class="hero">
   <div class="hover-zone"></div>
 
-  <div class="vertical-menu" id="verticalMenu">
+  <div class="vertical-menu">
     <a href="origin/index.html" class="menu-item" id="origin">Origin</a>
 
     <div class="menu-item collections-wrapper">
@@ -247,45 +218,47 @@ body {
 const collectionsWrapper = document.querySelector('.collections-wrapper');
 const submenu = document.getElementById('submenu');
 const lowerMenu = document.getElementById('lowerMenu');
-const verticalMenu = document.getElementById('verticalMenu');
+const verticalMenu = document.querySelector('.vertical-menu');
 const hoverZone = document.querySelector('.hover-zone');
 const hero = document.querySelector('.hero');
 
-// Desktop hover submenu
-collectionsWrapper.addEventListener('mouseenter', () => {
-  if(window.innerWidth > 768){
+// Desktop hover events
+if (window.innerWidth > 768) {
+  collectionsWrapper.addEventListener('mouseenter', () => {
     submenu.style.maxHeight = submenu.scrollHeight + 'px';
     lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
-  }
-});
-
-collectionsWrapper.addEventListener('mouseleave', () => {
-  if(window.innerWidth > 768){
+  });
+  collectionsWrapper.addEventListener('mouseleave', () => {
     submenu.style.maxHeight = '0';
     lowerMenu.style.transform = `translateY(0px)`;
-  }
-});
+  });
 
-// Slide-out menu on desktop
-hoverZone.addEventListener('mouseenter', () => { if(window.innerWidth > 768) verticalMenu.style.left = '30px'; hero.classList.add('pause-glow'); });
-hoverZone.addEventListener('mouseleave', () => { if(window.innerWidth > 768) verticalMenu.style.left = '-160px'; hero.classList.remove('pause-glow'); });
-verticalMenu.addEventListener('mouseenter', () => { if(window.innerWidth > 768) verticalMenu.style.left = '30px'; hero.classList.add('pause-glow'); });
-verticalMenu.addEventListener('mouseleave', () => { if(window.innerWidth > 768) verticalMenu.style.left = '-160px'; hero.classList.remove('pause-glow'); });
+  hoverZone.addEventListener('mouseenter', () => {
+    verticalMenu.style.left = '30px';
+    hero.classList.add('pause-glow');
+  });
+  hoverZone.addEventListener('mouseleave', () => {
+    verticalMenu.style.left = '-160px';
+    hero.classList.remove('pause-glow');
+  });
+  verticalMenu.addEventListener('mouseenter', () => {
+    verticalMenu.style.left = '30px';
+    hero.classList.add('pause-glow');
+  });
+  verticalMenu.addEventListener('mouseleave', () => {
+    verticalMenu.style.left = '-160px';
+    hero.classList.remove('pause-glow');
+  });
+}
 
-// Mobile submenu toggle
-if(window.innerWidth <= 768){
+// Mobile tap events
+if (window.innerWidth <= 768) {
   const collectionsBtn = document.getElementById('collectionsBtn');
   collectionsBtn.addEventListener('click', (e) => {
     e.preventDefault();
     submenu.classList.toggle('open');
   });
 }
-
-// Mobile menu toggle button
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-mobileMenuBtn.addEventListener('click', () => {
-  verticalMenu.classList.toggle('active');
-});
 </script>
 
 </body>
