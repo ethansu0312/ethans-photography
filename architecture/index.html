@@ -59,6 +59,14 @@ h1 {
 .back-button:hover {
     color: #ccc;          /* subtle hover effect */
 }
+/* Mobile-only adjustments for Architecture title */
+@media screen and (max-width: 768px) {
+  #category-title {
+    height: 50vh;               /* make the container shorter */
+    align-items: center !important; /* vertically center the text in the new height */
+    transform: scaleY(1.7) !important; /* keep your vertical stretch */
+  }
+}
 
 </style>
 </head>
