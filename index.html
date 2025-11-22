@@ -167,6 +167,29 @@ background: linear-gradient(to right,
     display: none !important;
   }
 }
+@media screen and (max-width: 768px) {
+  /* Circular button on bottom-left */
+  .mobile-menu-btn {
+    position: fixed;
+    bottom: 20px;       /* distance from bottom of screen */
+    left: 20px;         /* distance from left edge */
+    width: 60px;        /* button diameter */
+    height: 60px;
+    background-color: #fff; /* white button */
+    border-radius: 50%;     /* makes it circular */
+    z-index: 1000;          /* ensures it's above other content */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* subtle shadow */
+  }
+
+  /* Optional: button hover effect */
+  .mobile-menu-btn:hover {
+    background-color: #ccc;
+  }
+}
 
 </style>
 </head>
@@ -261,6 +284,10 @@ verticalMenu.addEventListener('mouseleave', () => {
 });
 
 </script>
+<!-- Mobile Menu Button -->
+<div class="mobile-menu-btn" id="mobileMenuBtn">
+  &#9776; <!-- Unicode hamburger icon, optional -->
+</div>
 
 </body>
 </html>
