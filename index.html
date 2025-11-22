@@ -160,51 +160,50 @@ background: linear-gradient(to right,
     flex-direction: column;
     transition: transform 0.5s ease;
   }
-/* Mobile styles */
+/* Mobile updates */
 @media screen and (max-width: 768px) {
 
-  /* Glow button touch area */
+  /* Glow touch area */
   .hover-zone {
     display: block;
     position: fixed;
     top: 0;
     left: 0;
-    width: 60px; /* same as desktop glow */
+    width: 60px;
     height: 100vh;
     z-index: 1000;
     background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 20%, transparent 100%);
     pointer-events: auto;
   }
 
-  /* Vertical menu hidden off-screen initially */
+  /* Vertical menu initially hidden offscreen */
   .vertical-menu {
     position: fixed;
-    left: -160px; /* hidden offscreen */
+    left: -160px;
     top: 0;
-    transform: none;
     flex-direction: column;
     align-items: flex-start;
-    background: transparent; /* no box, just text */
+    background: transparent;
     padding: 0;
     transition: left 0.4s ease;
     z-index: 999;
   }
 
   .vertical-menu.open {
-    left: 0; /* slides in from left */
+    left: 0; /* slides in */
   }
 
-  /* Menu items for mobile */
+  /* Main menu items with equal spacing */
   .vertical-menu .menu-item {
-    padding: 15px 20px;
-    font-size: 1.5rem;
     display: block;
-    color: #fff;
+    width: 100%;
+    padding: 15px 0;
+    font-size: 1.5rem;
     text-align: left;
-    width: auto;
+    box-sizing: border-box;
   }
 
-  /* Submenu hidden by default */
+  /* Submenu stays the same */
   .submenu {
     max-height: 0;
     overflow: hidden;
@@ -214,7 +213,7 @@ background: linear-gradient(to right,
   }
 
   .submenu.open {
-    max-height: 500px; /* reveal on tap */
+    max-height: 500px;
   }
 }
 
@@ -309,16 +308,25 @@ verticalMenu.addEventListener('mouseenter', () => {
 verticalMenu.addEventListener('mouseleave', () => {
   hero.classList.remove('pause-glow');
 });
-// Mobile menu toggle
+// Mobile menu toggle + auto retract
 if (window.innerWidth <= 768) {
   const hoverZone = document.querySelector('.hover-zone');
   const verticalMenu = document.querySelector('.vertical-menu');
   const collectionsBtn = document.getElementById('collectionsBtn');
   const submenu = document.getElementById('submenu');
+  let retractTimeout;
 
   // Tap glow to slide menu in/out
   hoverZone.addEventListener('click', () => {
-    verticalMenu.classList.toggle('open');
+    verticalMenu.classList.add('open');
+
+    // Clear previous timer
+    if (retractTimeout) clearTimeout(retractTimeout);
+
+    // Auto retract after 5 seconds
+    retractTimeout = setTimeout(() => {
+      verticalMenu.classList.remove('open');
+    }, 5000);
   });
 
   // Tap Collections to toggle submenu
