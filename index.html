@@ -160,44 +160,6 @@ background: linear-gradient(to right,
     flex-direction: column;
     transition: transform 0.5s ease;
   }
-/* Disable hero glow animation on mobile */
-@media screen and (max-width: 768px) {
-  .hero::before {
-    animation: none !important;
-  }
-}
-/* Mobile arrow button */
-@media screen and (max-width: 768px) {
-  .mobile-menu-arrow {
-    position: fixed;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    font-size: 2rem;
-    color: #fff;
-    z-index: 1001;
-    cursor: pointer;
-    padding: 10px;
-    user-select: none;
-  }
-
-  /* Slide-in menu */
-  .vertical-menu.mobile-hidden {
-    left: -100%; /* hidden off-screen */
-    transition: left 0.5s ease;
-  }
-
-  .vertical-menu.mobile-shown {
-    left: 0; /* fully visible */
-    transition: left 0.5s ease;
-  }
-}
-/* Remove hero glow for mobile */
-.hero::before {
-  display: none !important;
-}
-
-
 </style>
 </head>
 <body>
@@ -205,8 +167,6 @@ background: linear-gradient(to right,
 <div class="hero">
   <!-- Hover zone -->
   <div class="hover-zone"></div>
-<!-- Mobile menu arrow -->
-<div class="mobile-menu-arrow">&#9654;</div> <!-- Unicode arrow pointing right -->
 
   <div class="vertical-menu">
     <a href="origin/index.html" class="menu-item" id="origin">Origin</a>
@@ -291,29 +251,6 @@ verticalMenu.addEventListener('mouseenter', () => {
 verticalMenu.addEventListener('mouseleave', () => {
   hero.classList.remove('pause-glow');
 });
-if (window.innerWidth <= 768) {
-  const mobileArrow = document.querySelector('.mobile-menu-arrow');
-
-  // Start hidden
-  verticalMenu.classList.add('mobile-hidden');
-
-  mobileArrow.addEventListener('click', () => {
-    if (verticalMenu.classList.contains('mobile-hidden')) {
-      verticalMenu.classList.remove('mobile-hidden');
-      verticalMenu.classList.add('mobile-shown');
-      mobileArrow.style.display = 'none'; // hide arrow while menu is open
-    }
-  });
-
-  // Retract menu after 5 seconds
-  verticalMenu.addEventListener('transitionend', () => {
-    setTimeout(() => {
-      verticalMenu.classList.remove('mobile-shown');
-      verticalMenu.classList.add('mobile-hidden');
-      mobileArrow.style.display = 'block';
-    }, 5000);
-  });
-}
 
 </script>
 
