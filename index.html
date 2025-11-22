@@ -5,73 +5,105 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ethan's Photography</title>
 <style>
+  /* Font integration */
   @font-face {
     font-family: 'Gochi Hand';
     src: url('GochiHand-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
   }
 
   body {
     margin: 0;
     background: #000;
     color: #fff;
-    font-family: 'Gochi Hand', sans-serif;
+    font-family: 'Gochi Hand', sans-serif; /* UPDATED FONT ONLY */
   }
 
   .hero {
+    width: 100vw;
+    height: 100vh;
+    background: url('my-hero.jpg') center/cover no-repeat; /* CHANGED ONLY THIS LINE */
+    position: relative;
+  }
+
+.hero {
     position: relative;
     width: 100vw;
     height: 100vh;
     background: url('my-hero.jpg') center/cover no-repeat;
-    overflow: hidden;
-  }
+    overflow: hidden; /* ensure pseudo-element is clipped */
+}
 
-  .hero::before {
+.hero::before {
     content: "";
     position: absolute;
-    top: 0; left: 0;
-    width: 60px; height: 100%;
+    top: 0;
+    left: 0;
+    width: 60px; /* glow width */
+    height: 100%;
     pointer-events: none;
-    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 20%, transparent 100%);
-    z-index: 5;
+background: linear-gradient(to right,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 20%,
+    transparent 100%
+);
+    z-index: 5; /* above image, below menu */
     animation: pulseGlow 3s infinite ease-in-out;
-  }
+}
 
-  @keyframes pulseGlow {
+@keyframes pulseGlow {
     0%, 100% { opacity: 0.05; }
     50% { opacity: 0.4; }
-  }
+}
 
-  .hero.pause-glow::before { animation-play-state: paused !important; }
+/* Pause glow when .pause-glow is added */
+.hero.pause-glow::before {
+    animation-play-state: paused !important;
+}
 
-  .hero::after {
+
+.hero::after {
     content: "";
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.25);
-    pointer-events: none;
-  }
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.25); /* adjust darkness (0.25 = light, 0.5 = darker) */
+    pointer-events: none; /* so overlay doesn't block menu hover */
+}
 
-  /* Desktop vertical menu */
+
+  /* Vertical menu initially hidden off-screen */
   .vertical-menu {
     position: fixed;
-    left: -160px;
-    top: calc(50% - 130px);
+    left: -160px; /* hidden off-screen */
+    top: calc(50% - 130px); /* moved 50px upward */
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
     z-index: 100;
-    transition: left 0.4s ease;
+    transition: left 0.4s ease; /* smooth slide */
   }
 
+  /* Hover zone on the left edge to trigger menu */
   .hover-zone {
     position: fixed;
-    left: 0; top: 0;
-    width: 120px; height: 100vh;
+    left: 0;
+    top: 0;
+    width: 120px;  /* increased hover width */
+    height: 100vh;
     z-index: 50;
   }
 
-  .menu-item {
+  /* Main menu and submenu links */
+  .menu-item,
+  .menu-item:link,
+  .menu-item:visited,
+  .menu-item:hover,
+  .menu-item:active,
+  .menu-item:focus {
     text-decoration: none !important;
     color: #fff !important;
     padding: 20px 0;
@@ -80,11 +112,19 @@
     position: relative;
   }
 
-  .menu-item:hover { transform: translateX(5px); color: #ccc !important; }
+  .menu-item:hover,
+  .menu-item:focus,
+  .menu-item:active {
+    transform: translateX(5px);
+    color: #ccc !important;
+    text-decoration: none !important;
+  }
 
+  /* Submenu under Collections */
   .submenu {
     position: absolute;
-    top: 100%; left: 0;
+    top: 100%;
+    left: 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -93,80 +133,83 @@
     transition: max-height 0.5s ease;
   }
 
-  .submenu a { font-size: 1.5rem; color: #fff; min-width: 160px; transition: transform 0.2s, color 0.2s; }
-  .submenu a:hover { transform: translateX(5px); color: #aaa; }
-
-  .lower-menu { display: flex; flex-direction: column; transition: transform 0.5s ease; }
-
-  /* Mobile styles */
-  @media screen and (max-width: 768px) {
-    .hero::after { display: none; }
-
-    /* Mobile menu toggle button */
-    #menuToggle {
-      display: block;
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 1100;
-      background: #fff;
-      color: #000;
-      font-size: 1.2rem;
-      padding: 8px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    /* Vertical menu hidden by default, slides from left */
-    .vertical-menu {
-      position: fixed;
-      top: 0; left: 0;
-      width: 80%;
-      max-width: 300px;
-      height: 100vh;
-      transform: translateX(-100%);
-      flex-direction: column;
-      background: rgba(0,0,0,0.95);
-      padding: 10px 0;
-      z-index: 1000;
-      transition: transform 0.3s ease;
-    }
-
-    .vertical-menu.open { transform: translateX(0); }
-
-    .vertical-menu .menu-item {
-      width: 100%;
-      text-align: center;
-      padding: 15px 0;
-      font-size: 1.5rem;
-    }
-
-    /* Submenu hidden by default */
-    .submenu {
-      position: relative;
-      max-height: 0;
-      overflow: hidden;
-      width: 100%;
-      margin: 0; padding: 0;
-    }
-
-    .submenu.open { max-height: 1000px; transition: max-height 0.3s ease; }
-    .submenu a { font-size: 1.3rem; padding: 10px 0; width: 100%; text-align: center; }
+  .submenu a,
+  .submenu a:link,
+  .submenu a:visited,
+  .submenu a:hover,
+  .submenu a:active,
+  .submenu a:focus {
+    text-decoration: none !important;
+    color: #fff !important;
+    font-size: 1.5rem; /* smaller than main menu */
+    transition: transform 0.2s, color 0.2s;
+    min-width: 160px;
   }
 
-  /* Collections button hidden on desktop */
-  #collectionsBtn { display: none; }
-  @media screen and (max-width: 768px) { #collectionsBtn { display: block; } }
+  .submenu a:hover,
+  .submenu a:focus,
+  .submenu a:active {
+    transform: translateX(5px);
+    color: #aaa !important;
+    text-decoration: none !important;
+  }
+
+  /* Container for Archive + Connect that moves down */
+  .lower-menu {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.5s ease;
+  }
+/* Mobile responsiveness for screens smaller than 768px */
+@media screen and (max-width: 768px) {
+
+  /* Stack menu items vertically without touching the glow */
+  nav ul {
+    flex-direction: column; /* vertical menu */
+    align-items: center;
+    text-align: center;
+  }
+
+  nav ul li {
+    margin: 10px 0; /* spacing for stacked menu items */
+  }
+
+  /* Make the menu glow still work on hover/tap */
+  nav ul li a:hover {
+    text-shadow: 0 0 10px #fff, 0 0 20px #0ff;
+  }
+
+  /* Shrink fonts slightly for mobile */
+  h1, h2, h3, p, a {
+    font-size: 90%;
+  }
+
+  /* Make all images responsive */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Adjust padding for sections to fit small screens */
+  section {
+    padding: 20px;
+  }
+
+  /* Optional: reduce navbar height if needed */
+  nav {
+    padding: 10px 0;
+  }
+}
 
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <!-- Mobile Menu Toggle -->
-  <div id="menuToggle">Menu</div>
+  <!-- Hover zone -->
+  <div class="hover-zone"></div>
 
-  <div class="vertical-menu" id="verticalMenu">
+  <div class="vertical-menu">
     <a href="origin/index.html" class="menu-item" id="origin">Origin</a>
 
     <div class="menu-item collections-wrapper">
@@ -190,53 +233,66 @@
 const collectionsWrapper = document.querySelector('.collections-wrapper');
 const submenu = document.getElementById('submenu');
 const lowerMenu = document.getElementById('lowerMenu');
-const verticalMenu = document.getElementById('verticalMenu');
+const verticalMenu = document.querySelector('.vertical-menu');
 const hoverZone = document.querySelector('.hover-zone');
+
+// Dropdown submenu hover events
+collectionsWrapper.addEventListener('mouseenter', () => {
+  submenu.style.maxHeight = submenu.scrollHeight + 'px';
+  lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
+});
+
+collectionsWrapper.addEventListener('mouseleave', () => {
+  submenu.style.maxHeight = '0';
+  lowerMenu.style.transform = `translateY(0px)`;
+});
+
+submenu.addEventListener('mouseenter', () => {
+  submenu.style.maxHeight = submenu.scrollHeight + 'px';
+  lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
+});
+
+submenu.addEventListener('mouseleave', () => {
+  submenu.style.maxHeight = '0';
+  lowerMenu.style.transform = `translateY(0px)`;
+});
+
+// Slide-out menu on hover
+hoverZone.addEventListener('mouseenter', () => {
+  verticalMenu.style.left = '30px'; // visible position, 30px from left
+});
+
+hoverZone.addEventListener('mouseleave', () => {
+  verticalMenu.style.left = '-160px'; // hidden position
+});
+
+verticalMenu.addEventListener('mouseenter', () => {
+  verticalMenu.style.left = '30px';
+});
+
+verticalMenu.addEventListener('mouseleave', () => {
+  verticalMenu.style.left = '-160px';
+});
+
+// Pause hero glow on menu hover
 const hero = document.querySelector('.hero');
-const menuToggle = document.getElementById('menuToggle');
 
-// Desktop hover events
-if (window.innerWidth > 768) {
-  collectionsWrapper.addEventListener('mouseenter', () => {
-    submenu.style.maxHeight = submenu.scrollHeight + 'px';
-    lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
-  });
-  collectionsWrapper.addEventListener('mouseleave', () => {
-    submenu.style.maxHeight = '0';
-    lowerMenu.style.transform = `translateY(0px)`;
-  });
+hoverZone.addEventListener('mouseenter', () => {
+  hero.classList.add('pause-glow');
+});
 
-  hoverZone.addEventListener('mouseenter', () => {
-    verticalMenu.style.left = '30px';
-    hero.classList.add('pause-glow');
-  });
-  hoverZone.addEventListener('mouseleave', () => {
-    verticalMenu.style.left = '-160px';
-    hero.classList.remove('pause-glow');
-  });
-  verticalMenu.addEventListener('mouseenter', () => {
-    verticalMenu.style.left = '30px';
-    hero.classList.add('pause-glow');
-  });
-  verticalMenu.addEventListener('mouseleave', () => {
-    verticalMenu.style.left = '-160px';
-    hero.classList.remove('pause-glow');
-  });
-}
+hoverZone.addEventListener('mouseleave', () => {
+  hero.classList.remove('pause-glow');
+});
 
-// Mobile menu toggle
-if (window.innerWidth <= 768) {
-  menuToggle.addEventListener('click', () => {
-    verticalMenu.classList.toggle('open');
-  });
+verticalMenu.addEventListener('mouseenter', () => {
+  hero.classList.add('pause-glow');
+});
 
-  // Collections submenu toggle
-  const collectionsBtn = document.getElementById('collectionsBtn');
-  collectionsBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    submenu.classList.toggle('open');
-  });
-}
+verticalMenu.addEventListener('mouseleave', () => {
+  hero.classList.remove('pause-glow');
+});
+
 </script>
 
 </body>
