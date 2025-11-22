@@ -162,48 +162,48 @@ background: linear-gradient(to right,
   }
 @media screen and (max-width: 768px) {
 
-  /* Make glow touchable */
+  /* Make the glow tappable */
   .hover-zone {
     display: block;
+    width: 60px;
+    height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    width: 60px;
-    height: 100vh;
     z-index: 1000;
-    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 20%, transparent 100%);
     pointer-events: auto;
+    /* glow appearance */
+    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 20%, transparent 100%);
+    animation: pulseGlow 3s infinite ease-in-out;
   }
 
-  /* Vertical menu initially hidden offscreen on mobile */
+  /* Mobile vertical menu hidden offscreen initially */
   .vertical-menu {
     position: fixed;
-    left: -160px; /* hidden offscreen */
     top: 0;
-    width: 100%;
+    left: -160px; /* hidden */
+    width: auto;
     background: transparent;
     flex-direction: column;
     align-items: flex-start;
-    padding: 0;
+    padding: 0 20px;
     transition: left 0.5s ease;
     z-index: 999;
   }
 
-  /* Slide in when open */
   .vertical-menu.open {
-    left: 0;
+    left: 30px; /* slides in from left */
   }
 
-  /* Main menu items spacing */
+  /* Main menu items equal spacing */
   .vertical-menu .menu-item {
     display: block;
-    width: 100%;
-    padding: 15px 0;
     font-size: 1.5rem;
-    text-align: left;
+    padding: 15px 0;
+    width: auto;
   }
 
-  /* Submenu unchanged */
+  /* Submenu stays the same, just mobile-friendly */
   .submenu {
     max-height: 0;
     overflow: hidden;
@@ -214,6 +214,11 @@ background: linear-gradient(to right,
 
   .submenu.open {
     max-height: 500px;
+  }
+
+  /* Ensure hero overlay is hidden on mobile */
+  .hero::after {
+    display: none;
   }
 }
 
@@ -315,11 +320,11 @@ if (window.innerWidth <= 768) {
   const submenu = document.getElementById('submenu');
   let retractTimer;
 
-  // Tap glow to open menu
+  // Tap glow to slide menu in
   hoverZone.addEventListener('click', () => {
     verticalMenu.classList.add('open');
 
-    // Clear previous timer if user taps again
+    // Reset timer if tapped again
     if (retractTimer) clearTimeout(retractTimer);
 
     // Auto retract after 5 seconds
