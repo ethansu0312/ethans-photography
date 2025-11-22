@@ -346,6 +346,22 @@ if (window.innerWidth <= 768) {
     verticalMenu.classList.toggle('show');
   });
 }
+// MOBILE: toggle submenu open/close on tap
+if (window.innerWidth <= 768) {
+  const collectionsBtn = document.getElementById('collectionsBtn');
+  const submenu = document.getElementById('submenu');
+
+  collectionsBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    // If open → close. If closed → open.
+    if (submenu.style.maxHeight && submenu.style.maxHeight !== "0px") {
+      submenu.style.maxHeight = "0px";
+    } else {
+      submenu.style.maxHeight = submenu.scrollHeight + "px";
+    }
+  });
+}
 
 </script>
 <!-- Mobile Menu Button -->
