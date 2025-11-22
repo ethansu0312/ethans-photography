@@ -28,10 +28,8 @@
   .hero::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 60px;
-    height: 100%;
+    top: 0; left: 0;
+    width: 60px; height: 100%;
     pointer-events: none;
     background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 20%, transparent 100%);
     z-index: 5;
@@ -43,9 +41,7 @@
     50% { opacity: 0.4; }
   }
 
-  .hero.pause-glow::before {
-    animation-play-state: paused !important;
-  }
+  .hero.pause-glow::before { animation-play-state: paused !important; }
 
   .hero::after {
     content: "";
@@ -56,7 +52,7 @@
     pointer-events: none;
   }
 
-  /* Desktop menu */
+  /* Desktop vertical menu */
   .vertical-menu {
     position: fixed;
     left: -160px;
@@ -97,38 +93,16 @@
     transition: max-height 0.5s ease;
   }
 
-  .submenu a { font-size: 1.5rem; color: #fff; min-width: 160px; }
-
-  .submenu a:hover { color: #aaa; transform: translateX(5px); }
+  .submenu a { font-size: 1.5rem; color: #fff; min-width: 160px; transition: transform 0.2s, color 0.2s; }
+  .submenu a:hover { transform: translateX(5px); color: #aaa; }
 
   .lower-menu { display: flex; flex-direction: column; transition: transform 0.5s ease; }
 
-  /* Mobile */
+  /* Mobile styles */
   @media screen and (max-width: 768px) {
     .hero::after { display: none; }
 
-    /* Menu hidden by default on mobile */
-    .vertical-menu {
-      position: fixed;
-      top: 0; left: 0;
-      width: 80%;
-      max-width: 300px;
-      height: 100vh;
-      transform: translateX(-100%);
-      flex-direction: column;
-      background: rgba(0,0,0,0.95);
-      padding: 10px 0;
-      z-index: 1000;
-      transition: transform 0.3s ease;
-    }
-
-    .vertical-menu.open {
-      transform: translateX(0);
-    }
-
-    .hover-zone { display: none; }
-
-    /* Menu toggle button */
+    /* Mobile menu toggle button */
     #menuToggle {
       display: block;
       position: fixed;
@@ -143,7 +117,23 @@
       cursor: pointer;
     }
 
-    /* Stack items */
+    /* Vertical menu hidden by default, slides from left */
+    .vertical-menu {
+      position: fixed;
+      top: 0; left: 0;
+      width: 80%;
+      max-width: 300px;
+      height: 100vh;
+      transform: translateX(-100%);
+      flex-direction: column;
+      background: rgba(0,0,0,0.95);
+      padding: 10px 0;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .vertical-menu.open { transform: translateX(0); }
+
     .vertical-menu .menu-item {
       width: 100%;
       text-align: center;
@@ -157,25 +147,23 @@
       max-height: 0;
       overflow: hidden;
       width: 100%;
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
     }
+
     .submenu.open { max-height: 1000px; transition: max-height 0.3s ease; }
-
     .submenu a { font-size: 1.3rem; padding: 10px 0; width: 100%; text-align: center; }
-
-    /* Show Collections button */
-    #collectionsBtn { display: block; }
   }
 
-  /* Hide collections button on desktop */
+  /* Collections button hidden on desktop */
   #collectionsBtn { display: none; }
+  @media screen and (max-width: 768px) { #collectionsBtn { display: block; } }
+
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <!-- Mobile menu toggle -->
+  <!-- Mobile Menu Toggle -->
   <div id="menuToggle">Menu</div>
 
   <div class="vertical-menu" id="verticalMenu">
@@ -236,7 +224,7 @@ if (window.innerWidth > 768) {
   });
 }
 
-// Mobile toggle menu
+// Mobile menu toggle
 if (window.innerWidth <= 768) {
   menuToggle.addEventListener('click', () => {
     verticalMenu.classList.toggle('open');
