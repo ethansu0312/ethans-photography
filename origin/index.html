@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Origin - Ethan's Photography</title>
+<style>
+@font-face { font-family:'CategoryFont'; src:url('../fonts/BebasNeue-Regular.ttf') format('truetype'); }
+body { margin:0; font-family:sans-serif; background-color:#000; color:#fff; }
+
+/* Add this at the top with your other @font-face */
+@font-face {
+    font-family: 'ShadowsIntoLight';
+    src: url('ShadowsIntoLight-Regular.ttf') format('truetype');
+}
+
+
+
+.back-button {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    font-size: 2rem;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'CategoryFont', sans-serif;
+    transition: color 0.2s, opacity 0.3s;
+    z-index: 1000;
+}
+.back-button:hover { color: #ccc; }
+
+/* Split screen container */
+.origin-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Left side image */
+.origin-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.origin-image img {
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Right side content */
+.origin-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 50px 20px;
+}
+.origin-title {
+    font-family: 'CategoryFont', sans-serif;
+    font-size: 8vw; /* big title but contained */
+    margin: 0 0 30px 0;
+    white-space: nowrap;
+}
+/* Then in your description */
+.origin-description {
+    font-family: 'ShadowsIntoLight';
+    font-size: 1.2rem;
+    line-height: 1.6;
+    max-width: 600px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .origin-container { flex-direction: column; }
+    .origin-image, .origin-content { flex: none; width: 100%; text-align: center; }
+    .origin-description { max-width: 90%; margin: 0 auto; }
+}
+</style>
+</head>
+<body>
+
+<a href="../index.html" class="back-button">← Back</a>
+
+<div class="origin-container">
+    <div class="origin-image">
+<img src="ethan.jpg" alt="Ethan Photo">
+    </div>
+    <div class="origin-content">
+        <h1 class="origin-title">Origin</h1>
+        <p class="origin-description">
+            I’ve always loved chasing moments, the way a city feels at night, the roar of a car, the quiet streets when nobody’s around. Photography lets me hold onto those fleeting things, the memories that would otherwise slip away. I shoot what I feel, what catches my eye, whether it’s cars, streets, or places I stumble across while traveling. Every frame is a piece of a memory, something I hope can be held onto and felt long after the shutter clicks.
+        </p>
+    </div>
+</div>
+
+<script>
+// Fade back button when top of the page scrolls out
+const backButton = document.querySelector('.back-button');
+const originTitle = document.querySelector('.origin-title');
+
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        backButton.style.opacity = '1';
+        backButton.style.pointerEvents = 'auto';
+      } else {
+        backButton.style.opacity = '0';
+        backButton.style.pointerEvents = 'none';
+      }
+    });
+  },
+  { threshold: 0 }
+);
+observer.observe(originTitle);
+</script>
+
+</body>
+</html>

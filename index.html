@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ethan's Photography</title>
+<style>
+  /* Font integration */
+  @font-face {
+    font-family: 'Gochi Hand';
+    src: url('GochiHand-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  body {
+    margin: 0;
+    background: #000;
+    color: #fff;
+    font-family: 'Gochi Hand', sans-serif; /* UPDATED FONT ONLY */
+  }
+
+  .hero {
+    width: 100vw;
+    height: 100vh;
+    background: url('my-hero.jpg') center/cover no-repeat; /* CHANGED ONLY THIS LINE */
+    position: relative;
+  }
+
+.hero {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: url('my-hero.jpg') center/cover no-repeat;
+    overflow: hidden; /* ensure pseudo-element is clipped */
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px; /* glow width */
+    height: 100%;
+    pointer-events: none;
+background: linear-gradient(to right,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 20%,
+    transparent 100%
+);
+    z-index: 5; /* above image, below menu */
+    animation: pulseGlow 3s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 0.05; }
+    50% { opacity: 0.4; }
+}
+
+/* Pause glow when .pause-glow is added */
+.hero.pause-glow::before {
+    animation-play-state: paused !important;
+}
+
+
+.hero::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.25); /* adjust darkness (0.25 = light, 0.5 = darker) */
+    pointer-events: none; /* so overlay doesn't block menu hover */
+}
+
+
+  /* Vertical menu initially hidden off-screen */
+  .vertical-menu {
+    position: fixed;
+    left: -160px; /* hidden off-screen */
+    top: calc(50% - 130px); /* moved 50px upward */
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    transition: left 0.4s ease; /* smooth slide */
+  }
+
+  /* Hover zone on the left edge to trigger menu */
+  .hover-zone {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 120px;  /* increased hover width */
+    height: 100vh;
+    z-index: 50;
+  }
+
+  /* Main menu and submenu links */
+  .menu-item,
+  .menu-item:link,
+  .menu-item:visited,
+  .menu-item:hover,
+  .menu-item:active,
+  .menu-item:focus {
+    text-decoration: none !important;
+    color: #fff !important;
+    padding: 20px 0;
+    font-size: 2rem;
+    transition: transform 0.2s, color 0.2s;
+    position: relative;
+  }
+
+  .menu-item:hover,
+  .menu-item:focus,
+  .menu-item:active {
+    transform: translateX(5px);
+    color: #ccc !important;
+    text-decoration: none !important;
+  }
+
+  /* Submenu under Collections */
+  .submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+  }
+
+  .submenu a,
+  .submenu a:link,
+  .submenu a:visited,
+  .submenu a:hover,
+  .submenu a:active,
+  .submenu a:focus {
+    text-decoration: none !important;
+    color: #fff !important;
+    font-size: 1.5rem; /* smaller than main menu */
+    transition: transform 0.2s, color 0.2s;
+    min-width: 160px;
+  }
+
+  .submenu a:hover,
+  .submenu a:focus,
+  .submenu a:active {
+    transform: translateX(5px);
+    color: #aaa !important;
+    text-decoration: none !important;
+  }
+
+  /* Container for Archive + Connect that moves down */
+  .lower-menu {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.5s ease;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <!-- Hover zone -->
+  <div class="hover-zone"></div>
+
+  <div class="vertical-menu">
+    <a href="origin/index.html" class="menu-item" id="origin">Origin</a>
+
+    <div class="menu-item collections-wrapper">
+      <a href="#" id="collectionsBtn" class="menu-item">Collections</a>
+      <div class="submenu" id="submenu">
+        <a href="architecture/index.html">Architecture</a>
+        <a href="cars/index.html">Cars</a>
+        <a href="people/index.html">People</a>
+        <a href="travels/index.html">Travels</a>
+      </div>
+    </div>
+
+    <div class="lower-menu" id="lowerMenu">
+      <a href="archive/index.html" class="menu-item">Archive</a>
+      <a href="connect/index.html" class="menu-item">Connect</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const collectionsWrapper = document.querySelector('.collections-wrapper');
+const submenu = document.getElementById('submenu');
+const lowerMenu = document.getElementById('lowerMenu');
+const verticalMenu = document.querySelector('.vertical-menu');
+const hoverZone = document.querySelector('.hover-zone');
+
+// Dropdown submenu hover events
+collectionsWrapper.addEventListener('mouseenter', () => {
+  submenu.style.maxHeight = submenu.scrollHeight + 'px';
+  lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
+});
+
+collectionsWrapper.addEventListener('mouseleave', () => {
+  submenu.style.maxHeight = '0';
+  lowerMenu.style.transform = `translateY(0px)`;
+});
+
+submenu.addEventListener('mouseenter', () => {
+  submenu.style.maxHeight = submenu.scrollHeight + 'px';
+  lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
+});
+
+submenu.addEventListener('mouseleave', () => {
+  submenu.style.maxHeight = '0';
+  lowerMenu.style.transform = `translateY(0px)`;
+});
+
+// Slide-out menu on hover
+hoverZone.addEventListener('mouseenter', () => {
+  verticalMenu.style.left = '30px'; // visible position, 30px from left
+});
+
+hoverZone.addEventListener('mouseleave', () => {
+  verticalMenu.style.left = '-160px'; // hidden position
+});
+
+verticalMenu.addEventListener('mouseenter', () => {
+  verticalMenu.style.left = '30px';
+});
+
+verticalMenu.addEventListener('mouseleave', () => {
+  verticalMenu.style.left = '-160px';
+});
+
+// Pause hero glow on menu hover
+const hero = document.querySelector('.hero');
+
+hoverZone.addEventListener('mouseenter', () => {
+  hero.classList.add('pause-glow');
+});
+
+hoverZone.addEventListener('mouseleave', () => {
+  hero.classList.remove('pause-glow');
+});
+
+verticalMenu.addEventListener('mouseenter', () => {
+  hero.classList.add('pause-glow');
+});
+
+verticalMenu.addEventListener('mouseleave', () => {
+  hero.classList.remove('pause-glow');
+});
+
+</script>
+
+</body>
+</html>

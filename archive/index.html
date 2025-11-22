@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Projects - Ethan's Photography</title>
+<style>
+@font-face { font-family:'CategoryFont'; src:url('../fonts/BebasNeue-Regular.ttf') format('truetype'); }
+body { margin:0; font-family:sans-serif; background-color:#000; color:#fff; }
+h1 { text-align:center; padding:20px 0; margin:0; text-transform:capitalize; }
+#category-title { 
+  font-family:'CategoryFont', sans-serif; 
+  white-space:nowrap; 
+  overflow:hidden; 
+  border-right:2px solid #fff; 
+  font-size:19.8vw;            
+  height:51vh;               
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  transform: scaleY(1.7);       /* stretches the text vertically */
+}
+
+.gallery { column-count:4; column-gap:15px; padding:100px; }
+.gallery img { width:100%; margin-bottom:15px; border-radius:8px; transition:transform 0.3s; display:block; cursor:pointer; }
+.gallery img:hover { transform:scale(1.05); }
+@media (max-width:1200px){ .gallery{column-count:3;} }
+@media (max-width:900px){ .gallery{column-count:2;} }
+@media (max-width:600px){ .gallery{column-count:1;} }
+
+#lightbox { position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.75); display:none; justify-content:center; align-items:center; z-index:9999; cursor:zoom-out; }
+#lightbox img { max-width:90%; max-height:90%; border-radius:10px; box-shadow:0 0 30px rgba(0,0,0,0.8); }
+
+/* Back button styling */
+.back-button {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    font-size: 2rem;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'CategoryFont', sans-serif;
+    transition: color 0.2s, opacity 0.3s;
+    z-index: 1000;
+}
+.back-button:hover { color: #ccc; }
+</style>
+</head>
+<body>
+
+<a href="../index.html" class="back-button">← Back</a>
+
+<h1 id="category-title"></h1>
+<div class="gallery" id="gallery"></div>
+<div id="lightbox"><img src="" alt="Enlarged Photo"></div>
+
+<script>
+const title=document.getElementById('category-title');
+const text="archive";
+let i=0;
+const totalDuration=1200;
+const speed=totalDuration/text.length;
+function typeWriterSmooth(){ 
+    if(i<text.length){ 
+        title.textContent=text.substring(0,i+1)+"_"; 
+        i++; 
+        setTimeout(typeWriterSmooth,speed); 
+    } else { 
+        title.textContent=text; 
+    } 
+}
+window.addEventListener('DOMContentLoaded', typeWriterSmooth);
+
+const gallery=document.querySelector('#gallery');
+const lightbox=document.getElementById('lightbox');
+const lightboxImg=lightbox.querySelector('img');
+for(let j=1;j<=20;j++){
+  const img=document.createElement('img');
+  img.src=`images/${j}.jpg`;
+  img.alt=`${text} Photo ${j}`;
+  img.addEventListener('click',()=>{ lightbox.style.display='flex'; lightboxImg.src=img.src; });
+  gallery.appendChild(img);
+}
+lightbox.addEventListener('click',()=>{ lightbox.style.display='none'; });
+
+// Fade back button when title scrolls out of view
+const backButton = document.querySelector('.back-button');
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        backButton.style.opacity = '1';
+        backButton.style.pointerEvents = 'auto';
+      } else {
+        backButton.style.opacity = '0';
+        backButton.style.pointerEvents = 'none';
+      }
+    });
+  },
+  { threshold: 0 }
+);
+observer.observe(title);
+
+</script>
+
+</body>
+</html>

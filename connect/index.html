@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connect - Ethan's Photography</title>
+
+<style>
+@font-face {
+    font-family: 'CategoryFont';
+    src: url('../fonts/BebasNeue-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'HandFont';
+    src: url('../fonts/ShadowsIntoLight-Regular.ttf') format('truetype');
+}
+
+.contact-text {
+    font-family: 'HandFont', sans-serif;
+    color: #fff;
+    text-decoration: none;  /* removes underline */
+    font-size: 1.5rem;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    color: #fff;
+    font-family: sans-serif;
+}
+
+/* IDENTICAL BACK BUTTON */
+.back-button {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    font-size: 2rem;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'CategoryFont', sans-serif;
+    transition: color 0.2s, opacity 0.3s;
+    z-index: 1000;
+}
+.back-button:hover {
+    color: #ccc;
+}
+
+/* CENTER CONTENT */
+.connect-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+/* EACH LINE */
+.contact-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 25px 0;
+}
+
+/* ICONS */
+.icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-right: 12px;
+}
+
+/* TEXT LINKS */
+.contact-line a {
+    font-size: 1.5rem;
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+}
+
+.contact-line a:hover {
+    opacity: 0.7;
+}
+/* Force no underline and keep white color for connect links */
+.connect-container .contact-line a,
+.connect-container .contact-line a:link,
+.connect-container .contact-line a:visited,
+.connect-container .contact-line a:hover,
+.connect-container .contact-line a:active,
+.connect-container .contact-line a:focus {
+  text-decoration: none !important;
+  color: #ffffff !important;
+}
+
+/* keep the subtle hover opacity without changing color */
+.connect-container .contact-line a:hover {
+  opacity: 0.7;
+}
+
+</style>
+</head>
+<body>
+
+<a href="../index.html" class="back-button">← Back</a>
+
+<div class="connect-container">
+
+    <div class="contact-line">
+        <img src="instagram.png" class="icon" alt="Instagram Icon">
+        <a href="https://instagram.com/ethaaaaan.jpg" target="_blank" class="contact-text">
+            @ethaaaaan.jpg
+        </a>
+    </div>
+
+    <div class="contact-line">
+        <img src="email.png" class="icon" alt="Email Icon">
+        <a href="mailto:ethan.su0312@gmail.com" class="contact-text">
+            ethan.su0312@gmail.com
+        </a>
+    </div>
+
+</div>
+
+
+</body>
+</html>
