@@ -5,12 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ethan's Photography</title>
 <style>
-  /* Font integration */
   @font-face {
     font-family: 'Gochi Hand';
     src: url('GochiHand-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
   }
 
   body {
@@ -20,7 +17,6 @@
     font-family: 'Gochi Hand', sans-serif;
   }
 
-  /* Hero section with glow overlay */
   .hero {
     position: relative;
     width: 100vw;
@@ -54,15 +50,13 @@
   .hero::after {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     background: rgba(0,0,0,0.25);
     pointer-events: none;
   }
 
-  /* Desktop vertical menu */
+  /* Desktop menu */
   .vertical-menu {
     position: fixed;
     left: -160px;
@@ -76,19 +70,12 @@
 
   .hover-zone {
     position: fixed;
-    left: 0;
-    top: 0;
-    width: 120px;
-    height: 100vh;
+    left: 0; top: 0;
+    width: 120px; height: 100vh;
     z-index: 50;
   }
 
-  .menu-item,
-  .menu-item:link,
-  .menu-item:visited,
-  .menu-item:hover,
-  .menu-item:active,
-  .menu-item:focus {
+  .menu-item {
     text-decoration: none !important;
     color: #fff !important;
     padding: 20px 0;
@@ -97,17 +84,11 @@
     position: relative;
   }
 
-  .menu-item:hover,
-  .menu-item:focus,
-  .menu-item:active {
-    transform: translateX(5px);
-    color: #ccc !important;
-  }
+  .menu-item:hover { transform: translateX(5px); color: #ccc !important; }
 
   .submenu {
     position: absolute;
-    top: 100%;
-    left: 0;
+    top: 100%; left: 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -116,61 +97,61 @@
     transition: max-height 0.5s ease;
   }
 
-  .submenu a {
-    text-decoration: none !important;
-    color: #fff !important;
-    font-size: 1.5rem;
-    transition: transform 0.2s, color 0.2s;
-    min-width: 160px;
-  }
+  .submenu a { font-size: 1.5rem; color: #fff; min-width: 160px; }
 
-  .submenu a:hover {
-    transform: translateX(5px);
-    color: #aaa !important;
-  }
+  .submenu a:hover { color: #aaa; transform: translateX(5px); }
 
-  .lower-menu {
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.5s ease;
-  }
+  .lower-menu { display: flex; flex-direction: column; transition: transform 0.5s ease; }
 
-  /* Mobile styles */
+  /* Mobile */
   @media screen and (max-width: 768px) {
-    .hero::after {
-      display: none; /* remove black overlay on mobile */
-    }
+    .hero::after { display: none; }
 
-    /* Hide desktop hover menu, make vertical-menu toggleable */
+    /* Menu hidden by default on mobile */
     .vertical-menu {
       position: fixed;
-      left: 0;
-      top: 50px; /* leave space for toggle button */
-      width: 100%;
-      display: none; /* hidden by default */
+      top: 0; left: 0;
+      width: 80%;
+      max-width: 300px;
+      height: 100vh;
+      transform: translateX(-100%);
       flex-direction: column;
-      align-items: center;
       background: rgba(0,0,0,0.95);
       padding: 10px 0;
       z-index: 1000;
+      transition: transform 0.3s ease;
     }
 
-    .vertical-menu.mobile-visible {
-      display: flex;
+    .vertical-menu.open {
+      transform: translateX(0);
     }
 
-    .hover-zone {
-      display: none;
+    .hover-zone { display: none; }
+
+    /* Menu toggle button */
+    #menuToggle {
+      display: block;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1100;
+      background: #fff;
+      color: #000;
+      font-size: 1.2rem;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
     }
 
-    .menu-item {
-      width: 90%;
+    /* Stack items */
+    .vertical-menu .menu-item {
+      width: 100%;
       text-align: center;
       padding: 15px 0;
       font-size: 1.5rem;
     }
 
-    /* Submenu hidden by default, opens on tap */
+    /* Submenu hidden by default */
     .submenu {
       position: relative;
       max-height: 0;
@@ -179,55 +160,25 @@
       margin: 0;
       padding: 0;
     }
+    .submenu.open { max-height: 1000px; transition: max-height 0.3s ease; }
 
-    .submenu.open {
-      max-height: 1000px;
-      transition: max-height 0.5s ease;
-    }
+    .submenu a { font-size: 1.3rem; padding: 10px 0; width: 100%; text-align: center; }
 
-    .submenu a {
-      font-size: 1.3rem;
-      padding: 10px 0;
-      width: 100%;
-      text-align: center;
-    }
-
-    /* Mobile menu toggle button */
-    #mobileMenuToggle {
-      display: block;
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      z-index: 2000;
-      font-size: 2rem;
-      background: transparent;
-      color: #fff;
-      border: none;
-    }
+    /* Show Collections button */
+    #collectionsBtn { display: block; }
   }
 
-  /* Hide collections button on desktop, show on mobile */
-  #collectionsBtn {
-    display: none;
-  }
-
-  @media screen and (max-width: 768px) {
-    #collectionsBtn {
-      display: block;
-    }
-  }
-
+  /* Hide collections button on desktop */
+  #collectionsBtn { display: none; }
 </style>
 </head>
 <body>
 
-<!-- Mobile menu toggle button -->
-<button id="mobileMenuToggle">☰ Menu</button>
-
 <div class="hero">
-  <div class="hover-zone"></div>
+  <!-- Mobile menu toggle -->
+  <div id="menuToggle">Menu</div>
 
-  <div class="vertical-menu">
+  <div class="vertical-menu" id="verticalMenu">
     <a href="origin/index.html" class="menu-item" id="origin">Origin</a>
 
     <div class="menu-item collections-wrapper">
@@ -251,9 +202,10 @@
 const collectionsWrapper = document.querySelector('.collections-wrapper');
 const submenu = document.getElementById('submenu');
 const lowerMenu = document.getElementById('lowerMenu');
-const verticalMenu = document.querySelector('.vertical-menu');
+const verticalMenu = document.getElementById('verticalMenu');
 const hoverZone = document.querySelector('.hover-zone');
 const hero = document.querySelector('.hero');
+const menuToggle = document.getElementById('menuToggle');
 
 // Desktop hover events
 if (window.innerWidth > 768) {
@@ -284,17 +236,14 @@ if (window.innerWidth > 768) {
   });
 }
 
-// Mobile tap events
+// Mobile toggle menu
 if (window.innerWidth <= 768) {
-  const collectionsBtn = document.getElementById('collectionsBtn');
-  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-
-  // Toggle main menu
-  mobileMenuToggle.addEventListener('click', () => {
-    verticalMenu.classList.toggle('mobile-visible');
+  menuToggle.addEventListener('click', () => {
+    verticalMenu.classList.toggle('open');
   });
 
-  // Toggle Collections submenu
+  // Collections submenu toggle
+  const collectionsBtn = document.getElementById('collectionsBtn');
   collectionsBtn.addEventListener('click', (e) => {
     e.preventDefault();
     submenu.classList.toggle('open');
