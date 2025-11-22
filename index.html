@@ -160,6 +160,64 @@ background: linear-gradient(to right,
     flex-direction: column;
     transition: transform 0.5s ease;
   }
+/* Mobile styles */
+@media screen and (max-width: 768px) {
+
+  /* Glow button touch area */
+  .hover-zone {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 60px; /* same as desktop glow */
+    height: 100vh;
+    z-index: 1000;
+    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 20%, transparent 100%);
+    pointer-events: auto;
+  }
+
+  /* Vertical menu hidden off-screen initially */
+  .vertical-menu {
+    position: fixed;
+    left: -160px; /* hidden offscreen */
+    top: 0;
+    transform: none;
+    flex-direction: column;
+    align-items: flex-start;
+    background: transparent; /* no box, just text */
+    padding: 0;
+    transition: left 0.4s ease;
+    z-index: 999;
+  }
+
+  .vertical-menu.open {
+    left: 0; /* slides in from left */
+  }
+
+  /* Menu items for mobile */
+  .vertical-menu .menu-item {
+    padding: 15px 20px;
+    font-size: 1.5rem;
+    display: block;
+    color: #fff;
+    text-align: left;
+    width: auto;
+  }
+
+  /* Submenu hidden by default */
+  .submenu {
+    max-height: 0;
+    overflow: hidden;
+    flex-direction: column;
+    gap: 8px;
+    transition: max-height 0.3s ease;
+  }
+
+  .submenu.open {
+    max-height: 500px; /* reveal on tap */
+  }
+}
+
 </style>
 </head>
 <body>
@@ -251,6 +309,24 @@ verticalMenu.addEventListener('mouseenter', () => {
 verticalMenu.addEventListener('mouseleave', () => {
   hero.classList.remove('pause-glow');
 });
+// Mobile menu toggle
+if (window.innerWidth <= 768) {
+  const hoverZone = document.querySelector('.hover-zone');
+  const verticalMenu = document.querySelector('.vertical-menu');
+  const collectionsBtn = document.getElementById('collectionsBtn');
+  const submenu = document.getElementById('submenu');
+
+  // Tap glow to slide menu in/out
+  hoverZone.addEventListener('click', () => {
+    verticalMenu.classList.toggle('open');
+  });
+
+  // Tap Collections to toggle submenu
+  collectionsBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    submenu.classList.toggle('open');
+  });
+}
 
 </script>
 
