@@ -160,6 +160,14 @@ background: linear-gradient(to right,
     flex-direction: column;
     transition: transform 0.5s ease;
   }
+/* Mobile: iPhones, small tablets, portrait mode */
+@media screen and (max-width: 768px) {
+  /* Completely remove the hero glow on mobile */
+  .hero::before {
+    display: none !important;
+  }
+}
+
 </style>
 </head>
 <body>
