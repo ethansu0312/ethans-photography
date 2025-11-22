@@ -160,65 +160,44 @@ background: linear-gradient(to right,
     flex-direction: column;
     transition: transform 0.5s ease;
   }
+/* Mobile responsiveness for screens smaller than 768px */
 @media screen and (max-width: 768px) {
 
-  /* Make the glow tappable */
-  .hover-zone {
-    display: block;
-    width: 60px;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    pointer-events: auto;
-    /* glow appearance */
-    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 20%, transparent 100%);
-    animation: pulseGlow 3s infinite ease-in-out;
+  /* Stack menu items vertically without touching the glow */
+  nav ul {
+    flex-direction: column; /* vertical menu */
+    align-items: center;
+    text-align: center;
   }
 
-  /* Mobile vertical menu hidden offscreen initially */
-  .vertical-menu {
-    position: fixed;
-    top: 0;
-    left: -160px; /* hidden */
-    width: auto;
-    background: transparent;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0 20px;
-    transition: left 0.5s ease;
-    z-index: 999;
+  nav ul li {
+    margin: 10px 0; /* spacing for stacked menu items */
   }
 
-  .vertical-menu.open {
-    left: 30px; /* slides in from left */
+  /* Make the menu glow still work on hover/tap */
+  nav ul li a:hover {
+    text-shadow: 0 0 10px #fff, 0 0 20px #0ff;
   }
 
-  /* Main menu items equal spacing */
-  .vertical-menu .menu-item {
-    display: block;
-    font-size: 1.5rem;
-    padding: 15px 0;
-    width: auto;
+  /* Shrink fonts slightly for mobile */
+  h1, h2, h3, p, a {
+    font-size: 90%;
   }
 
-  /* Submenu stays the same, just mobile-friendly */
-  .submenu {
-    max-height: 0;
-    overflow: hidden;
-    flex-direction: column;
-    gap: 8px;
-    transition: max-height 0.3s ease;
+  /* Make all images responsive */
+  img {
+    max-width: 100%;
+    height: auto;
   }
 
-  .submenu.open {
-    max-height: 500px;
+  /* Adjust padding for sections to fit small screens */
+  section {
+    padding: 20px;
   }
 
-  /* Ensure hero overlay is hidden on mobile */
-  .hero::after {
-    display: none;
+  /* Optional: reduce navbar height if needed */
+  nav {
+    padding: 10px 0;
   }
 }
 
@@ -313,32 +292,6 @@ verticalMenu.addEventListener('mouseenter', () => {
 verticalMenu.addEventListener('mouseleave', () => {
   hero.classList.remove('pause-glow');
 });
-if (window.innerWidth <= 768) {
-  const hoverZone = document.querySelector('.hover-zone');
-  const verticalMenu = document.querySelector('.vertical-menu');
-  const collectionsBtn = document.getElementById('collectionsBtn');
-  const submenu = document.getElementById('submenu');
-  let retractTimer;
-
-  // Tap glow to slide menu in
-  hoverZone.addEventListener('click', () => {
-    verticalMenu.classList.add('open');
-
-    // Reset timer if tapped again
-    if (retractTimer) clearTimeout(retractTimer);
-
-    // Auto retract after 5 seconds
-    retractTimer = setTimeout(() => {
-      verticalMenu.classList.remove('open');
-    }, 5000);
-  });
-
-  // Tap Collections to toggle submenu
-  collectionsBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    submenu.classList.toggle('open');
-  });
-}
 
 </script>
 
