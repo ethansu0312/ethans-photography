@@ -141,17 +141,22 @@
       display: none; /* remove black overlay on mobile */
     }
 
+    /* Hide desktop hover menu, make vertical-menu toggleable */
     .vertical-menu {
-      position: relative;
-      left: 0 !important;
-      top: 0 !important;
+      position: fixed;
+      left: 0;
+      top: 50px; /* leave space for toggle button */
       width: 100%;
-      transform: none !important;
+      display: none; /* hidden by default */
       flex-direction: column;
       align-items: center;
       background: rgba(0,0,0,0.95);
       padding: 10px 0;
       z-index: 1000;
+    }
+
+    .vertical-menu.mobile-visible {
+      display: flex;
     }
 
     .hover-zone {
@@ -165,7 +170,7 @@
       font-size: 1.5rem;
     }
 
-    /* Submenu hidden by default, shown on tap */
+    /* Submenu hidden by default, opens on tap */
     .submenu {
       position: relative;
       max-height: 0;
@@ -176,7 +181,7 @@
     }
 
     .submenu.open {
-      max-height: 1000px; /* arbitrary large to reveal */
+      max-height: 1000px;
       transition: max-height 0.5s ease;
     }
 
@@ -186,21 +191,38 @@
       width: 100%;
       text-align: center;
     }
-  }
-/* Hide collections button on desktop, show on mobile */
-#collectionsBtn {
-  display: none; /* hidden by default */
-}
 
-@media screen and (max-width: 768px) {
-  #collectionsBtn {
-    display: block; /* visible on mobile */
+    /* Mobile menu toggle button */
+    #mobileMenuToggle {
+      display: block;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 2000;
+      font-size: 2rem;
+      background: transparent;
+      color: #fff;
+      border: none;
+    }
   }
-}
+
+  /* Hide collections button on desktop, show on mobile */
+  #collectionsBtn {
+    display: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    #collectionsBtn {
+      display: block;
+    }
+  }
 
 </style>
 </head>
 <body>
+
+<!-- Mobile menu toggle button -->
+<button id="mobileMenuToggle">☰ Menu</button>
 
 <div class="hero">
   <div class="hover-zone"></div>
@@ -265,6 +287,14 @@ if (window.innerWidth > 768) {
 // Mobile tap events
 if (window.innerWidth <= 768) {
   const collectionsBtn = document.getElementById('collectionsBtn');
+  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+
+  // Toggle main menu
+  mobileMenuToggle.addEventListener('click', () => {
+    verticalMenu.classList.toggle('mobile-visible');
+  });
+
+  // Toggle Collections submenu
   collectionsBtn.addEventListener('click', (e) => {
     e.preventDefault();
     submenu.classList.toggle('open');
