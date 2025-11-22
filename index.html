@@ -244,6 +244,12 @@ background: linear-gradient(to right,
     top: calc(50% - 180px);  /* moves menu upward */
   }
 }
+/* MOBILE — Smooth up/down shift for Archive + Connect */
+@media (max-width: 768px) {
+  #lowerMenu {
+    transition: transform 0.4s ease;
+  }
+}
 
 </style>
 </head>
@@ -346,22 +352,27 @@ if (window.innerWidth <= 768) {
     verticalMenu.classList.toggle('show');
   });
 }
-// MOBILE: toggle submenu open/close on tap
+// MOBILE: toggle submenu + move Archive & Connect
 if (window.innerWidth <= 768) {
   const collectionsBtn = document.getElementById('collectionsBtn');
   const submenu = document.getElementById('submenu');
+  const lowerMenu = document.getElementById('lowerMenu');
 
   collectionsBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
-    // If open → close. If closed → open.
-    if (submenu.style.maxHeight && submenu.style.maxHeight !== "0px") {
+    const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== "0px";
+
+    if (isOpen) {
       submenu.style.maxHeight = "0px";
+      lowerMenu.style.transform = "translateY(0px)";
     } else {
       submenu.style.maxHeight = submenu.scrollHeight + "px";
+      lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
     }
   });
 }
+
 
 </script>
 <!-- Mobile Menu Button -->
