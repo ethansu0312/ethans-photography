@@ -161,7 +161,52 @@ background: linear-gradient(to right,
     transition: transform 0.5s ease;
   }
 /* Mobile responsiveness for screens smaller than 768px */
+/* Mobile menu adjustments */
 @media screen and (max-width: 768px) {
+
+  /* Make the vertical menu always visible on mobile */
+  .vertical-menu {
+    position: fixed;
+    left: 0 !important;
+    top: 0;
+    transform: none !important;
+    width: 100%;
+    padding: 10px 0;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .hover-zone {
+    display: none; /* hide hover zone on mobile */
+  }
+
+  /* Stack main menu items and increase tap area */
+  .vertical-menu .menu-item {
+    display: block;
+    width: 90%;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 1.5rem;
+  }
+
+  /* Submenu always visible when tapping parent */
+  .submenu {
+    max-height: none !important;
+    overflow: visible !important;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .submenu a {
+    font-size: 1.3rem;
+    padding: 10px 0;
+    width: 100%;
+  }
+}
 
   /* Stack menu items vertically without touching the glow */
   nav ul {
@@ -292,6 +337,16 @@ verticalMenu.addEventListener('mouseenter', () => {
 verticalMenu.addEventListener('mouseleave', () => {
   hero.classList.remove('pause-glow');
 });
+
+// Mobile tap-to-open for Collections submenu
+if (window.innerWidth <= 768) {
+  const collectionsBtn = document.getElementById('collectionsBtn');
+
+  collectionsBtn.addEventListener('click', (e) => {
+    e.preventDefault(); // prevent # link jump
+    submenu.classList.toggle('open');
+  });
+}
 
 </script>
 
