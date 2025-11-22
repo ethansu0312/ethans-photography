@@ -190,6 +190,54 @@ background: linear-gradient(to right,
     background-color: #ccc;
   }
 }
+/* Mobile-only styles */
+@media screen and (max-width: 768px) {
+
+  /* Circular button at bottom-left */
+  #menuBtn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #fff; /* or any color you like */
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 2rem;
+    color: #000;
+  }
+
+  /* Mobile vertical menu hidden off-screen initially */
+  .vertical-menu {
+    position: fixed;
+    left: -200px; /* completely hidden off-screen */
+    top: 50%;
+    transform: translateY(-50%);
+    flex-direction: column;
+    z-index: 1000;
+    transition: left 0.4s ease;
+    background: transparent; /* no overlay or box */
+  }
+
+  .vertical-menu.show {
+    left: 20px; /* slide in position */
+  }
+
+  .vertical-menu .menu-item {
+    font-size: 1.5rem;
+    padding: 10px 0;
+    color: #fff;
+  }
+
+  .vertical-menu .submenu a {
+    font-size: 1.3rem;
+    padding: 8px 0;
+  }
+}
 
 </style>
 </head>
@@ -198,6 +246,8 @@ background: linear-gradient(to right,
 <div class="hero">
   <!-- Hover zone -->
   <div class="hover-zone"></div>
+<!-- Mobile menu button -->
+<div id="menuBtn">&#9776;</div> <!-- hamburger icon, you can replace with an arrow or icon -->
 
   <div class="vertical-menu">
     <a href="origin/index.html" class="menu-item" id="origin">Origin</a>
@@ -282,6 +332,14 @@ verticalMenu.addEventListener('mouseenter', () => {
 verticalMenu.addEventListener('mouseleave', () => {
   hero.classList.remove('pause-glow');
 });
+// Mobile menu toggle
+if (window.innerWidth <= 768) {
+  const menuBtn = document.getElementById('menuBtn');
+
+  menuBtn.addEventListener('click', () => {
+    verticalMenu.classList.toggle('show');
+  });
+}
 
 </script>
 <!-- Mobile Menu Button -->
