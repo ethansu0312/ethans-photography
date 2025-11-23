@@ -375,47 +375,45 @@ const collectionsBtn = document.getElementById('collectionsBtn');
 const submenu = document.getElementById('submenu');
 const lowerMenu = document.getElementById('lowerMenu');
 
-// ---------------------------
-// MOBILE / iPad MENU FIX
-// ---------------------------
-function initMobileMenu() {
-  if (window.innerWidth <= 1024 && ('ontouchstart' in window || navigator.maxTouchPoints > 0)) {
+function setupMobileMenu() {
+  const isMobile = window.innerWidth <= 1024 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
-    // Toggle main menu
-    menuBtn.onclick = () => {
-      verticalMenu.classList.toggle('show');
-      
-      // Always close submenu when main menu toggles
+  if (!isMobile) {
+    // Reset desktop menu
+    verticalMenu.classList.remove('show');
+    submenu.style.maxHeight = "0px";
+    lowerMenu.style.transform = "translateY(0px)";
+    return;
+  }
+
+  // Use addEventListener instead of onclick to avoid losing previous listeners
+  menuBtn.addEventListener('click', () => {
+    verticalMenu.classList.toggle('show');
+    // Always close submenu when main menu toggles
+    submenu.style.maxHeight = "0px";
+    lowerMenu.style.transform = "translateY(0px)";
+  });
+
+  collectionsBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== "0px";
+    if (isOpen) {
       submenu.style.maxHeight = "0px";
       lowerMenu.style.transform = "translateY(0px)";
-    };
-
-    // Toggle submenu under Collections
-    collectionsBtn.onclick = (e) => {
-      e.preventDefault();
-      const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== "0px";
-      if (isOpen) {
-        submenu.style.maxHeight = "0px";
-        lowerMenu.style.transform = "translateY(0px)";
-      } else {
-        submenu.style.maxHeight = submenu.scrollHeight + "px";
-        lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
-      }
-    };
-  }
+    } else {
+      submenu.style.maxHeight = submenu.scrollHeight + "px";
+      lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
+    }
+  });
 }
 
-// Initialize menu on page load
-window.addEventListener('load', initMobileMenu);
+// Initialize menu on load
+window.addEventListener('load', setupMobileMenu);
 
-// Re-initialize menu on window resize (for rotation)
-window.addEventListener('resize', () => {
-  verticalMenu.classList.remove('show'); // hide menu
-  submenu.style.maxHeight = "0px";
-  lowerMenu.style.transform = "translateY(0px)";
-  initMobileMenu();
-});
+// Re-run on resize (for iPad rotation)
+window.addEventListener('resize', setupMobileMenu);
 </script>
+
 
 
 
