@@ -89,8 +89,8 @@
 
   .lower-menu { display:flex; flex-direction:column; transition: transform .5s ease; }
 
-  /* MOBILE STYLES */
-  @media screen and (max-width: 1024px) {
+  /* MOBILE & TABLET STYLES - Updated to include iPads */
+  @media screen and (max-width: 1366px) {
     .hero::before { display: none !important; }
 
     /* Mobile menu button */
@@ -129,11 +129,6 @@
     .vertical-menu { top: calc(50% - 180px); }
 
     #lowerMenu { transition: transform .5s ease; }
-  }
-
-  @media screen and (min-width: 769px) {
-    /* desktop: hide the mobile button */
-    #menuBtn { display: none !important; }
   }
 </style>
 </head>
@@ -209,9 +204,9 @@
     lowerMenu.style.transform = 'translateY(0px)';
   }
 
-  // utility
+  // utility - Updated to include iPads
   function isTouchMobile() {
-    return ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 1024;
+    return ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 1366;
   }
 
   // Setup mobile listeners once (they check isTouchMobile inside)
