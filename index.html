@@ -368,32 +368,37 @@ verticalMenu.addEventListener('mouseleave', () => {
 
 
 </script>
-<script>
+<<script>
 const verticalMenu = document.querySelector('.vertical-menu');
 const menuBtn = document.getElementById('menuBtn');
 const collectionsBtn = document.getElementById('collectionsBtn');
 const submenu = document.getElementById('submenu');
 const lowerMenu = document.getElementById('lowerMenu');
 
-// Track state
 let menuOpen = false;
 let submenuOpen = false;
 
-// Function to update menu visibility
-function updateMobileMenu() {
-  const isMobile = window.innerWidth <= 1024 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-
-  if (!isMobile) {
-    // Reset for desktop
+function initMobileMenu() {
+  // Only for iPads/iPhones
+  if (!('ontouchstart' in window || navigator.maxTouchPoints > 0)) {
+    // Remove mobile menu button on desktop
     verticalMenu.classList.remove('show');
     submenu.style.maxHeight = "0px";
     lowerMenu.style.transform = "translateY(0px)";
-    menuOpen = false;
-    submenuOpen = false;
+    menuBtn.style.display = "none";
     return;
   }
 
-  // Remove existing event listeners to prevent duplicates
+  menuBtn.style.display = "flex";
+
+  // Reset state
+  menuOpen = false;
+  submenuOpen = false;
+  verticalMenu.classList.remove('show');
+  submenu.style.maxHeight = "0px";
+  lowerMenu.style.transform = "translateY(0px)";
+
+  // Remove previous listeners to avoid duplicates
   menuBtn.replaceWith(menuBtn.cloneNode(true));
   collectionsBtn.replaceWith(collectionsBtn.cloneNode(true));
 
@@ -403,9 +408,8 @@ function updateMobileMenu() {
   // Toggle main menu
   newMenuBtn.addEventListener('click', () => {
     menuOpen = !menuOpen;
-    if (menuOpen) {
-      verticalMenu.classList.add('show');
-    } else {
+    if (menuOpen) verticalMenu.classList.add('show');
+    else {
       verticalMenu.classList.remove('show');
       submenu.style.maxHeight = "0px";
       lowerMenu.style.transform = "translateY(0px)";
@@ -427,18 +431,11 @@ function updateMobileMenu() {
   });
 }
 
-// Initialize on page load
-window.addEventListener('load', updateMobileMenu);
-
-// Update on resize (for rotation)
-window.addEventListener('resize', updateMobileMenu);
+// Initialize on load
+window.addEventListener('load', initMobileMenu);
+// Update on resize/rotation
+window.addEventListener('resize', initMobileMenu);
 </script>
-
-
-
-
-
-
 
 </body>
 </html>
