@@ -375,10 +375,12 @@ const collectionsBtn = document.getElementById('collectionsBtn');
 const submenu = document.getElementById('submenu');
 const lowerMenu = document.getElementById('lowerMenu');
 
+// Track state
 let menuOpen = false;
 let submenuOpen = false;
 
-function updateMenuVisibility() {
+// Function to update menu visibility
+function updateMobileMenu() {
   const isMobile = window.innerWidth <= 1024 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
   if (!isMobile) {
@@ -391,21 +393,28 @@ function updateMenuVisibility() {
     return;
   }
 
-  // Main menu toggle
-  menuBtn.onclick = () => {
+  // Remove existing event listeners to prevent duplicates
+  menuBtn.replaceWith(menuBtn.cloneNode(true));
+  collectionsBtn.replaceWith(collectionsBtn.cloneNode(true));
+
+  const newMenuBtn = document.getElementById('menuBtn');
+  const newCollectionsBtn = document.getElementById('collectionsBtn');
+
+  // Toggle main menu
+  newMenuBtn.addEventListener('click', () => {
     menuOpen = !menuOpen;
     if (menuOpen) {
       verticalMenu.classList.add('show');
     } else {
       verticalMenu.classList.remove('show');
-      submenu.style.maxHeight = "0px"; // close submenu when menu closes
+      submenu.style.maxHeight = "0px";
       lowerMenu.style.transform = "translateY(0px)";
       submenuOpen = false;
     }
-  };
+  });
 
-  // Submenu toggle
-  collectionsBtn.onclick = (e) => {
+  // Toggle submenu
+  newCollectionsBtn.addEventListener('click', (e) => {
     e.preventDefault();
     submenuOpen = !submenuOpen;
     if (submenuOpen) {
@@ -415,15 +424,16 @@ function updateMenuVisibility() {
       submenu.style.maxHeight = "0px";
       lowerMenu.style.transform = "translateY(0px)";
     }
-  };
+  });
 }
 
-// Initialize menu on load
-window.addEventListener('load', updateMenuVisibility);
+// Initialize on page load
+window.addEventListener('load', updateMobileMenu);
 
-// Handle rotation / resize
-window.addEventListener('resize', updateMenuVisibility);
+// Update on resize (for rotation)
+window.addEventListener('resize', updateMobileMenu);
 </script>
+
 
 
 
