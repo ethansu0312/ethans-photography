@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Ethan's Photography</title>
 <style>
-  /* Font integration */
+  /* Your existing styles, slightly consolidated where needed */
   @font-face {
     font-family: 'BebasNeue';
     src: url('BebasNeue-Regular.ttf') format('truetype');
@@ -17,110 +17,62 @@
     margin: 0;
     background: #000;
     color: #fff;
-    font-family: 'BebasNeue', sans-serif; /* UPDATED FONT ONLY */
+    font-family: 'BebasNeue', sans-serif;
   }
 
   .hero {
-    width: 100vw;
-    height: 100vh;
-    background: url('my-hero.jpg') center/cover no-repeat; /* CHANGED ONLY THIS LINE */
-    position: relative;
-  }
-
-.hero {
     position: relative;
     width: 100vw;
     height: 100vh;
     background: url('my-hero.jpg') center/cover no-repeat;
-    overflow: hidden; /* ensure pseudo-element is clipped */
-}
+    overflow: hidden;
+  }
 
-.hero::before {
+  .hero::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 60px; /* glow width */
-    height: 100%;
+    top: 0; left: 0;
+    width: 60px; height: 100%;
     pointer-events: none;
-background: linear-gradient(to right,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(255, 255, 255, 1) 20%,
-    transparent 100%
-);
-    z-index: 5; /* above image, below menu */
+    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 20%, transparent 100%);
+    z-index: 5;
     animation: pulseGlow 3s infinite ease-in-out;
-}
+  }
 
-@keyframes pulseGlow {
-    0%, 100% { opacity: 0.05; }
-    50% { opacity: 0.4; }
-}
+  @keyframes pulseGlow { 0%,100%{opacity:.05}50%{opacity:.4} }
+  .hero.pause-glow::before { animation-play-state: paused !important; }
 
-/* Pause glow when .pause-glow is added */
-.hero.pause-glow::before {
-    animation-play-state: paused !important;
-}
+  .hero::after{
+    content:"";
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.25); pointer-events:none;
+  }
 
-
-.hero::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.25); /* adjust darkness (0.25 = light, 0.5 = darker) */
-    pointer-events: none; /* so overlay doesn't block menu hover */
-}
-
-
-  /* Vertical menu initially hidden off-screen */
+  /* Desktop vertical menu (default) */
   .vertical-menu {
     position: fixed;
-    left: -160px; /* hidden off-screen */
-    top: calc(50% - 130px); /* moved 50px upward */
+    left: -160px;
+    top: calc(50% - 130px);
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
     z-index: 100;
-    transition: left 0.4s ease; /* smooth slide */
+    transition: left 0.35s ease;
   }
 
-  /* Hover zone on the left edge to trigger menu */
   .hover-zone {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 120px;  /* increased hover width */
-    height: 100vh;
-    z-index: 50;
+    position: fixed; left: 0; top: 0; width: 120px; height: 100vh; z-index: 50;
   }
 
-  /* Main menu and submenu links */
-  .menu-item,
-  .menu-item:link,
-  .menu-item:visited,
-  .menu-item:hover,
-  .menu-item:active,
-  .menu-item:focus {
+  .menu-item, .menu-item:link, .menu-item:visited {
     text-decoration: none !important;
     color: #fff !important;
     padding: 20px 0;
     font-size: 2rem;
-    transition: transform 0.2s, color 0.2s;
+    transition: transform .2s, color .2s;
     position: relative;
   }
 
-  .menu-item:hover,
-  .menu-item:focus,
-  .menu-item:active {
-    transform: translateX(5px);
-    color: #ccc !important;
-    text-decoration: none !important;
-  }
-
-  /* Submenu under Collections */
   .submenu {
     position: absolute;
     top: 100%;
@@ -130,159 +82,70 @@ background: linear-gradient(to right,
     gap: 8px;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.5s ease;
+    transition: max-height .4s ease;
   }
 
-  .submenu a,
-  .submenu a:link,
-  .submenu a:visited,
-  .submenu a:hover,
-  .submenu a:active,
-  .submenu a:focus {
-    text-decoration: none !important;
-    color: #fff !important;
-    font-size: 1.5rem; /* smaller than main menu */
-    transition: transform 0.2s, color 0.2s;
-    min-width: 160px;
+  .submenu a { min-width: 160px; font-size: 1.5rem; color:#fff; text-decoration:none!important; }
+
+  .lower-menu { display:flex; flex-direction:column; transition: transform .5s ease; }
+
+  /* MOBILE STYLES */
+  @media screen and (max-width: 1024px) {
+    .hero::before { display: none !important; }
+
+    /* Mobile menu button */
+    #menuBtn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #fff;
+      z-index: 1001;
+      display: none; /* JS will show it on touch/mobile */
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 2rem;
+      color: #000;
+    }
+
+    .vertical-menu {
+      left: -200px; /* hidden for mobile */
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1000;
+      transition: left 0.35s ease;
+      background: transparent;
+    }
+
+    .vertical-menu.show { left: 20px; }
+
+    .vertical-menu .menu-item { font-size: 1.5rem; padding: 10px 0; color: #fff; }
+    .vertical-menu .submenu a { font-size: 1.3rem; padding: 8px 0; }
+
+    /* adjust vertical position on small screens */
+    .vertical-menu { top: calc(50% - 180px); }
+
+    #lowerMenu { transition: transform .5s ease; }
   }
 
-  .submenu a:hover,
-  .submenu a:focus,
-  .submenu a:active {
-    transform: translateX(5px);
-    color: #aaa !important;
-    text-decoration: none !important;
+  @media screen and (min-width: 769px) {
+    /* desktop: hide the mobile button */
+    #menuBtn { display: none !important; }
   }
-
-  /* Container for Archive + Connect that moves down */
-  .lower-menu {
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.5s ease;
-  }
-/* Mobile: iPhones, small tablets, portrait mode */
-@media screen and (max-width: 1024px) {
-  /* Completely remove the hero glow on mobile */
-  .hero::before {
-    display: none !important;
-  }
-}
-@media screen and (max-width: 1024px) {
-  /* Circular button on bottom-left */
-  .mobile-menu-btn {
-    position: fixed;
-    bottom: 20px;       /* distance from bottom of screen */
-    left: 20px;         /* distance from left edge */
-    width: 60px;        /* button diameter */
-    height: 60px;
-    background-color: #fff; /* white button */
-    border-radius: 50%;     /* makes it circular */
-    z-index: 1000;          /* ensures it's above other content */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* subtle shadow */
-  }
-
-  /* Optional: button hover effect */
-  .mobile-menu-btn:hover {
-    background-color: #ccc;
-  }
-}
-/* Mobile-only styles */
-@media screen and (max-width: 1024px) {
-
-  /* Circular button at bottom-left */
-  #menuBtn {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: #fff; /* or any color you like */
-    z-index: 1001;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 2rem;
-    color: #000;
-  }
-
-  /* Mobile vertical menu hidden off-screen initially */
-  .vertical-menu {
-    position: fixed;
-    left: -200px; /* completely hidden off-screen */
-    top: 50%;
-    transform: translateY(-50%);
-    flex-direction: column;
-    z-index: 1000;
-    transition: left 0.4s ease;
-    background: transparent; /* no overlay or box */
-  }
-
-  .vertical-menu.show {
-    left: 20px; /* slide in position */
-  }
-
-  .vertical-menu .menu-item {
-    font-size: 1.5rem;
-    padding: 10px 0;
-    color: #fff;
-  }
-
-  .vertical-menu .submenu a {
-    font-size: 1.3rem;
-    padding: 8px 0;
-  }
-}
-/* MOBILE MENU SHIFT UP */
-@media (max-width: 1024px) {
-  .vertical-menu {
-    top: calc(50% - 180px);  /* moves menu upward */
-  }
-}
-/* MOBILE — Smooth up/down shift for Archive + Connect */
-@media (max-width: 1024px) {
-  #lowerMenu {
-    transition: transform 0.5s ease;
-  }
-}
-@media screen and (min-width: 769px) {
-  #menuBtn {
-    display: none !important;
-  }
-}
-/* Ensure menu button appears on iPads (portrait & landscape) */
-@media screen and (min-width: 769px) and (max-width: 1024px) {
-  #menuBtn {
-    display: flex !important; /* show the hamburger */
-  }
-
-  /* Remove hero glow on iPads just like iPhones */
-  .hero::before {
-    display: none !important;
-  }
-
-  /* Optional: adjust vertical menu top position like iPhone */
-  .vertical-menu {
-    top: calc(50% - 180px); /* same as iPhone shift */
-  }
-}
-
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <!-- Hover zone -->
   <div class="hover-zone"></div>
-<!-- Mobile menu button -->
-<div id="menuBtn">&#9776;</div> <!-- hamburger icon, you can replace with an arrow or icon -->
 
-  <div class="vertical-menu">
+  <!-- Mobile menu button (shown by JS only on touch devices) -->
+  <div id="menuBtn" aria-label="menu" role="button">&#9776;</div>
+
+  <div class="vertical-menu" aria-hidden="true">
     <a href="origin/index.html" class="menu-item" id="origin">Origin</a>
 
     <div class="menu-item collections-wrapper">
@@ -302,154 +165,154 @@ background: linear-gradient(to right,
   </div>
 </div>
 
+<!-- ===== JS: clean, single source of truth for desktop/mobile ===== -->
 <script>
 (function() {
-  const collectionsWrapper = document.querySelector('.collections-wrapper');
-  const submenu = document.getElementById('submenu');
-  const lowerMenu = document.getElementById('lowerMenu');
+  // element refs
   const verticalMenu = document.querySelector('.vertical-menu');
   const hoverZone = document.querySelector('.hover-zone');
   const hero = document.querySelector('.hero');
-
-  function isMobile() {
-    return ('ontouchstart' in window || navigator.maxTouchPoints > 0) &&
-           window.innerWidth <= 1024;
-  }
-
-  // DESKTOP BEHAVIOR (hover)
-  function enableDesktopMenu() {
-    console.log("Desktop menu enabled");
-
-    hoverZone.addEventListener('mouseenter', desktopOpen);
-    hoverZone.addEventListener('mouseleave', desktopClose);
-    verticalMenu.addEventListener('mouseenter', desktopOpen);
-    verticalMenu.addEventListener('mouseleave', desktopClose);
-
-    function desktopOpen() {
-      verticalMenu.style.left = '30px';
-      hero.classList.add('pause-glow');
-    }
-
-    function desktopClose() {
-      verticalMenu.style.left = '-160px';
-      hero.classList.remove('pause-glow');
-      submenu.style.maxHeight = '0px';
-      lowerMenu.style.transform = 'translateY(0px)';
-    }
-
-    collectionsWrapper.addEventListener('mouseenter', () => {
-      submenu.style.maxHeight = submenu.scrollHeight + 'px';
-      lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
-    });
-
-    collectionsWrapper.addEventListener('mouseleave', () => {
-      submenu.style.maxHeight = '0px';
-      lowerMenu.style.transform = 'translateY(0px)';
-    });
-  }
-
-  // MOBILE: disable hover behavior entirely
-  function disableDesktopMenu() {
-    console.log("Desktop menu disabled");
-    verticalMenu.style.left = '-160px'; // fully hide
-  }
-
-  window.addEventListener('load', () => {
-    if (isMobile()) disableDesktopMenu();
-    else enableDesktopMenu();
-  });
-
-  window.addEventListener('resize', () => {
-    if (isMobile()) disableDesktopMenu();
-    else enableDesktopMenu();
-  });
-
-})();
-</script>
-<script>
-(function(){
-  const verticalMenu = document.querySelector('.vertical-menu');
-  const menuBtn = document.getElementById('menuBtn');
-  const collectionsBtn = document.getElementById('collectionsBtn');
+  const collectionsWrapper = document.querySelector('.collections-wrapper');
   const submenu = document.getElementById('submenu');
   const lowerMenu = document.getElementById('lowerMenu');
 
-  // sanity check
-  if (!verticalMenu || !menuBtn || !collectionsBtn || !submenu || !lowerMenu) {
-    console.error('MENU DEBUG: missing element(s):', {
-      verticalMenu: !!verticalMenu,
-      menuBtn: !!menuBtn,
-      collectionsBtn: !!collectionsBtn,
-      submenu: !!submenu,
-      lowerMenu: !!lowerMenu
+  const menuBtn = document.getElementById('menuBtn');
+  const collectionsBtn = document.getElementById('collectionsBtn');
+
+  // sanity
+  if (!verticalMenu || !menuBtn || !collectionsBtn || !submenu || !lowerMenu || !hoverZone || !collectionsWrapper) {
+    console.error('MENU INIT: missing element(s)', {
+      verticalMenu: !!verticalMenu, menuBtn: !!menuBtn, collectionsBtn: !!collectionsBtn,
+      submenu: !!submenu, lowerMenu: !!lowerMenu, hoverZone: !!hoverZone, collectionsWrapper: !!collectionsWrapper
     });
     return;
   }
 
-  function isMobile() {
+  // handlers references so we can add/remove cleanly
+  function desktopHoverOpen() {
+    verticalMenu.style.left = '30px';
+    hero.classList.add('pause-glow');
+  }
+  function desktopHoverClose() {
+    verticalMenu.style.left = '-160px';
+    hero.classList.remove('pause-glow');
+    // also collapse submenu when leaving
+    submenu.style.maxHeight = '0px';
+    lowerMenu.style.transform = 'translateY(0px)';
+  }
+  function desktopCollectionsEnter() {
+    submenu.style.maxHeight = submenu.scrollHeight + 'px';
+    lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
+  }
+  function desktopCollectionsLeave() {
+    submenu.style.maxHeight = '0px';
+    lowerMenu.style.transform = 'translateY(0px)';
+  }
+
+  // utility
+  function isTouchMobile() {
     return ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 1024;
   }
 
-  function setButtonVisibility() {
-    menuBtn.style.display = isMobile() ? 'flex' : 'none';
+  // Setup mobile listeners once (they check isTouchMobile inside)
+  function setupMobileListeners() {
+    // main menu button: toggles class .show
+    // single handler, always present, but will no-op on desktop
+    if (!menuBtn._mobileListenerAttached) {
+      menuBtn.addEventListener('click', function (e) {
+        if (!isTouchMobile()) return;
+        verticalMenu.classList.toggle('show');
+        // if menu closed, collapse submenu
+        if (!verticalMenu.classList.contains('show')) {
+          submenu.style.maxHeight = '0px';
+          lowerMenu.style.transform = 'translateY(0px)';
+        }
+      });
+      menuBtn._mobileListenerAttached = true;
+    }
+
+    // collections button toggles submenu on mobile (and prevents default)
+    if (!collectionsBtn._mobileListenerAttached) {
+      collectionsBtn.addEventListener('click', function (e) {
+        if (!isTouchMobile()) return; // desktop will use hover
+        e.preventDefault();
+        const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== '0px';
+        if (isOpen) {
+          submenu.style.maxHeight = '0px';
+          lowerMenu.style.transform = 'translateY(0px)';
+        } else {
+          submenu.style.maxHeight = submenu.scrollHeight + 'px';
+          lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
+        }
+      });
+      collectionsBtn._mobileListenerAttached = true;
+    }
   }
 
-  // show initial state
-  window.addEventListener('load', () => {
-    console.log('MENU DEBUG: load, innerWidth=', window.innerWidth, 'isMobile=', isMobile());
-    setButtonVisibility();
-    verticalMenu.classList.remove('show');
-    submenu.style.maxHeight = '0px';
-    lowerMenu.style.transform = 'translateY(0px)';
-  });
+  // Enable desktop hover behavior: add event listeners
+  let desktopEnabled = false;
+  function enableDesktopHover() {
+    if (desktopEnabled) return;
+    hoverZone.addEventListener('mouseenter', desktopHoverOpen);
+    hoverZone.addEventListener('mouseleave', desktopHoverClose);
+    verticalMenu.addEventListener('mouseenter', desktopHoverOpen);
+    verticalMenu.addEventListener('mouseleave', desktopHoverClose);
 
-  // handle rotation/resize
-  window.addEventListener('resize', () => {
-    console.log('MENU DEBUG: resize, innerWidth=', window.innerWidth, 'isMobile=', isMobile());
-    setButtonVisibility();
-    if (!isMobile()) {
+    collectionsWrapper.addEventListener('mouseenter', desktopCollectionsEnter);
+    collectionsWrapper.addEventListener('mouseleave', desktopCollectionsLeave);
+    desktopEnabled = true;
+    console.log('MENU: desktop hover enabled');
+  }
+
+  // Disable desktop hover behavior: remove event listeners
+  function disableDesktopHover() {
+    if (!desktopEnabled) return;
+    hoverZone.removeEventListener('mouseenter', desktopHoverOpen);
+    hoverZone.removeEventListener('mouseleave', desktopHoverClose);
+    verticalMenu.removeEventListener('mouseenter', desktopHoverOpen);
+    verticalMenu.removeEventListener('mouseleave', desktopHoverClose);
+
+    collectionsWrapper.removeEventListener('mouseenter', desktopCollectionsEnter);
+    collectionsWrapper.removeEventListener('mouseleave', desktopCollectionsLeave);
+    desktopEnabled = false;
+    console.log('MENU: desktop hover disabled');
+  }
+
+  // initialize UI state depending on device
+  function updateMode() {
+    const mobile = isTouchMobile();
+    // show or hide mobile button
+    menuBtn.style.display = mobile ? 'flex' : 'none';
+
+    if (mobile) {
+      // disable hover behaviours that fight the mobile toggle
+      disableDesktopHover();
+      // ensure menu closed initially
+      verticalMenu.classList.remove('show');
+      submenu.style.maxHeight = '0px';
+      lowerMenu.style.transform = 'translateY(0px)';
+    } else {
+      // enable desktop hover logic
+      enableDesktopHover();
+      // ensure menu uses desktop left values (and hidden)
+      verticalMenu.style.left = '-160px';
       verticalMenu.classList.remove('show');
       submenu.style.maxHeight = '0px';
       lowerMenu.style.transform = 'translateY(0px)';
     }
-  });
+  }
 
-  // main menu button
-  menuBtn.addEventListener('click', (e) => {
-    console.log('MENU DEBUG: menuBtn clicked — isMobile=', isMobile());
-    if (!isMobile()) {
-      console.log('MENU DEBUG: ignoring click because not mobile');
-      return;
-    }
-    verticalMenu.classList.toggle('show');
-    console.log('MENU DEBUG: show class present? ', verticalMenu.classList.contains('show'));
-    if (!verticalMenu.classList.contains('show')) {
-      submenu.style.maxHeight = '0px';
-      lowerMenu.style.transform = 'translateY(0px)';
-      console.log('MENU DEBUG: menu closed → submenu forced closed');
-    }
-  });
+  // run once and on resize
+  setupMobileListeners(); // attach persistent mobile listeners (no clones)
+  window.addEventListener('load', updateMode);
+  window.addEventListener('resize', updateMode);
 
-  // collections submenu
-  collectionsBtn.addEventListener('click', (e) => {
-    console.log('MENU DEBUG: collectionsBtn clicked — isMobile=', isMobile());
-    if (!isMobile()) {
-      e.preventDefault();
-      console.log('MENU DEBUG: ignoring submenu toggle because not mobile');
-      return;
-    }
-    e.preventDefault();
-    const open = submenu.style.maxHeight && submenu.style.maxHeight !== '0px';
-    console.log('MENU DEBUG: submenu currently open? ', open);
-    if (open) {
-      submenu.style.maxHeight = '0px';
-      lowerMenu.style.transform = 'translateY(0px)';
-      console.log('MENU DEBUG: submenu closed');
-    } else {
-      submenu.style.maxHeight = submenu.scrollHeight + 'px';
-      lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
-      console.log('MENU DEBUG: submenu opened with height', submenu.scrollHeight);
-    }
+  // For debugging: log clicks and states (remove logs later if you want)
+  menuBtn.addEventListener('click', () => {
+    console.log('MENU: menuBtn clicked; show class present:', verticalMenu.classList.contains('show'), 'isTouchMobile:', isTouchMobile(), 'innerWidth:', window.innerWidth);
+  });
+  collectionsBtn.addEventListener('click', () => {
+    console.log('MENU: collectionsBtn clicked; submenu height:', submenu.style.maxHeight);
   });
 
 })();
