@@ -369,43 +369,55 @@ verticalMenu.addEventListener('mouseleave', () => {
 
 </script>
 <script>
-const verticalMenu = document.querySelector('.vertical-menu');
-const menuBtn = document.getElementById('menuBtn');
-const collectionsBtn = document.getElementById('collectionsBtn');
-const submenu = document.getElementById('submenu');
-const lowerMenu = document.getElementById('lowerMenu');
+function initMobileMenu() {
+  const menuBtn = document.getElementById('menuBtn');
+  const verticalMenu = document.querySelector('.vertical-menu');
+  const collectionsBtn = document.getElementById('collectionsBtn');
+  const submenu = document.getElementById('submenu');
+  const lowerMenu = document.getElementById('lowerMenu');
 
-// ---------------------------
-// MOBILE / iPad MENU FIX
-// ---------------------------
-const isTouchMobile = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 1024;
+  // Remove existing listeners to prevent duplicates
+  menuBtn.replaceWith(menuBtn.cloneNode(true));
+  collectionsBtn.replaceWith(collectionsBtn.cloneNode(true));
 
-if (isTouchMobile) {
-  // Toggle main menu
-  menuBtn.addEventListener('click', () => {
-    verticalMenu.classList.toggle('show');
-    
-    // Always close submenu when main menu toggles
-    submenu.style.maxHeight = "0px";
-    lowerMenu.style.transform = "translateY(0px)";
-  });
+  const menuBtnNew = document.getElementById('menuBtn');
+  const collectionsBtnNew = document.getElementById('collectionsBtn');
 
-  // Toggle submenu under Collections
-  collectionsBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== "0px";
-    if (isOpen) {
+  if (window.innerWidth <= 1024) {
+    // Toggle main menu
+    menuBtnNew.addEventListener('click', () => {
+      verticalMenu.classList.toggle('show');
       submenu.style.maxHeight = "0px";
       lowerMenu.style.transform = "translateY(0px)";
-    } else {
-      submenu.style.maxHeight = submenu.scrollHeight + "px";
-      lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
-    }
-  });
+    });
+
+    // Toggle submenu under Collections
+    collectionsBtnNew.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== "0px";
+      if (isOpen) {
+        submenu.style.maxHeight = "0px";
+        lowerMenu.style.transform = "translateY(0px)";
+      } else {
+        submenu.style.maxHeight = submenu.scrollHeight + "px";
+        lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
+      }
+    });
+  } else {
+    // Ensure menu is hidden on desktop
+    verticalMenu.classList.remove('show');
+    submenu.style.maxHeight = "0px";
+    lowerMenu.style.transform = "translateY(0px)";
+  }
 }
 
-  
+// Initialize menu on load
+window.addEventListener('load', initMobileMenu);
+
+// Re-initialize menu on resize (iPad rotate, etc.)
+window.addEventListener('resize', initMobileMenu);
 </script>
+
 
 </body>
 </html>
