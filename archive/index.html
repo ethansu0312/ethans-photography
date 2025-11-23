@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Archive - Ethan's Photography</title>
+<title>Personal Projects - Ethan's Photography</title>
 <style>
 @font-face { font-family:'CategoryFont'; src:url('../fonts/BebasNeue-Regular.ttf') format('truetype'); }
 body { margin:0; font-family:sans-serif; background-color:#000; color:#fff; }
@@ -18,74 +18,18 @@ h1 { text-align:center; padding:20px 0; margin:0; text-transform:capitalize; }
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  transform: scaleY(1.7);
+  transform: scaleY(1.7);       /* stretches the text vertically */
 }
-.gallery { 
-  column-count:4; 
-  column-gap:15px; 
-  padding:100px;
-  column-fill: balance;
-}
-.gallery img { 
-  width:100%; 
-  margin-bottom:15px; 
-  border-radius:8px; 
-  transition:transform 0.3s, opacity 0.3s; 
-  display:block; 
-  cursor:pointer;
-  opacity: 0;
-}
-.gallery img.loaded { opacity: 1; }
+
+.gallery { column-count:4; column-gap:15px; padding:100px; }
+.gallery img { width:100%; margin-bottom:15px; border-radius:8px; transition:transform 0.3s; display:block; cursor:pointer; }
 .gallery img:hover { transform:scale(1.05); }
-
-.img-placeholder {
-  background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-  border-radius: 8px;
-  margin-bottom: 15px;
-}
-@keyframes loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
 @media (max-width:1200px){ .gallery{column-count:3;} }
 @media (max-width:900px){ .gallery{column-count:2;} }
-@media (max-width:600px){ .gallery{column-count:2;} }
+@media (max-width:600px){ .gallery{column-count:1;} }
 
-#lightbox { 
-  position:fixed; 
-  top:0; 
-  left:0; 
-  width:100%; 
-  height:100%; 
-  background-color:rgba(0,0,0,0.9); 
-  display:none; 
-  justify-content:center; 
-  align-items:center; 
-  z-index:9999; 
-  cursor:zoom-out; 
-}
-#lightbox img { 
-  max-width:90%; 
-  max-height:90%; 
-  border-radius:10px; 
-  box-shadow:0 0 30px rgba(0,0,0,0.8); 
-}
-.lightbox-loader {
-  position: absolute;
-  border: 4px solid #333;
-  border-top: 4px solid #fff;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-}
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+#lightbox { position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.75); display:none; justify-content:center; align-items:center; z-index:9999; cursor:zoom-out; }
+#lightbox img { max-width:90%; max-height:90%; border-radius:10px; box-shadow:0 0 30px rgba(0,0,0,0.8); }
 
 /* Back button styling */
 .back-button {
@@ -100,43 +44,16 @@ h1 { text-align:center; padding:20px 0; margin:0; text-transform:capitalize; }
     z-index: 1000;
 }
 .back-button:hover { color: #ccc; }
-
-/* iPad-specific adjustments (768px to 1366px) */
-@media screen and (min-width: 769px) and (max-width: 1366px) {
-  #category-title {
-    font-size: 15vw;
-    height: 40vh;
-    align-items: center;
-    transform: scaleY(1.5);
-  }
-  .gallery { 
-    padding: 50px;
-    column-fill: auto;             /* fix: makes columns start evenly */
-  }
-}
-
-/* Mobile-only adjustments */
-@media screen and (max-width: 768px) {
-  #category-title {
-    height: 30vh;                      /* reduced from 50vh - less space between title and images */
-    align-items: center !important;    /* vertically center the text in the new height */
-    transform: scaleY(1.7) !important; /* keep your vertical stretch */
-  }
-  .gallery { 
-    padding: 30px 20px;                /* reduced top padding from 50px to 30px - smaller gap */
-    column-fill: auto;                 /* fix: makes columns start evenly */
-  }
-}
 </style>
 </head>
 <body>
+
 <a href="../index.html" class="back-button">← Back</a>
+
 <h1 id="category-title"></h1>
 <div class="gallery" id="gallery"></div>
-<div id="lightbox">
-  <div class="lightbox-loader"></div>
-  <img src="" alt="Enlarged Photo">
-</div>
+<div id="lightbox"><img src="" alt="Enlarged Photo"></div>
+
 <script>
 const title=document.getElementById('category-title');
 const text="archive";
@@ -157,68 +74,14 @@ window.addEventListener('DOMContentLoaded', typeWriterSmooth);
 const gallery=document.querySelector('#gallery');
 const lightbox=document.getElementById('lightbox');
 const lightboxImg=lightbox.querySelector('img');
-const lightboxLoader=lightbox.querySelector('.lightbox-loader');
-
-// ===== CONFIGURATION: Set your total number of images here =====
-const TOTAL_IMAGES = 200; // Change this to however many images you have
-// ================================================================
-
-// Create lazy-loaded images
-for(let j=1; j<=TOTAL_IMAGES; j++){
+for(let j=1;j<=20;j++){
   const img=document.createElement('img');
-  
-  // Use thumbnail for gallery display (loads faster)
-  img.dataset.src=`thumbs/${j}.jpg`; // Lazy load attribute
-  img.dataset.fullSrc=`images/${j}.jpg`; // Full res for lightbox
+  img.src=`images/${j}.jpg`;
   img.alt=`${text} Photo ${j}`;
-  img.loading = "lazy"; // Native browser lazy loading
-  
-  // Click handler for lightbox
-  img.addEventListener('click', function() {
-    lightbox.style.display='flex';
-    lightboxLoader.style.display='block';
-    lightboxImg.style.display='none';
-    
-    // Load full resolution image in lightbox
-    const fullImg = new Image();
-    fullImg.onload = function() {
-      lightboxImg.src = fullImg.src;
-      lightboxImg.style.display='block';
-      lightboxLoader.style.display='none';
-    };
-    fullImg.src = this.dataset.fullSrc;
-  });
-  
+  img.addEventListener('click',()=>{ lightbox.style.display='flex'; lightboxImg.src=img.src; });
   gallery.appendChild(img);
 }
-
-// Intersection Observer for lazy loading with fade-in effect
-const imageObserver = new IntersectionObserver((entries, observer) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const img = entry.target;
-      // Load the thumbnail
-      img.src = img.dataset.src;
-      img.onload = () => {
-        img.classList.add('loaded'); // Fade in
-      };
-      observer.unobserve(img); // Stop observing once loaded
-    }
-  });
-}, {
-  rootMargin: '50px' // Start loading 50px before image enters viewport
-});
-
-// Observe all images
-document.querySelectorAll('.gallery img').forEach(img => {
-  imageObserver.observe(img);
-});
-
-// Close lightbox
-lightbox.addEventListener('click', ()=>{ 
-  lightbox.style.display='none';
-  lightboxImg.src = ''; // Clear to save memory
-});
+lightbox.addEventListener('click',()=>{ lightbox.style.display='none'; });
 
 // Fade back button when title scrolls out of view
 const backButton = document.querySelector('.back-button');
@@ -237,6 +100,8 @@ const observer = new IntersectionObserver(
   { threshold: 0 }
 );
 observer.observe(title);
+
 </script>
+
 </body>
 </html>
