@@ -41,13 +41,14 @@ h1 {
 @media (max-width:900px){ .gallery{column-count:2;} }
 @media (max-width:600px){ 
   .gallery{
-    column-count:2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
     padding: 30px 10px;
-    column-gap: 10px;
+    column-count: unset;
   }
   .gallery img {
-    break-inside: avoid;
-    page-break-inside: avoid;
+    grid-column: auto;
   }
   #category-title {
     padding-bottom: 20px;
