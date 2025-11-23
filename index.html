@@ -368,7 +368,7 @@ verticalMenu.addEventListener('mouseleave', () => {
 
 
 </script>
-<<script>
+<script>
 const verticalMenu = document.querySelector('.vertical-menu');
 const menuBtn = document.getElementById('menuBtn');
 const collectionsBtn = document.getElementById('collectionsBtn');
@@ -378,27 +378,32 @@ const lowerMenu = document.getElementById('lowerMenu');
 let menuOpen = false;
 let submenuOpen = false;
 
+function isMobile() {
+  return ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 1024;
+}
+
 function initMobileMenu() {
-  // Only for iPads/iPhones
-  if (!('ontouchstart' in window || navigator.maxTouchPoints > 0)) {
-    // Remove mobile menu button on desktop
+  if (!isMobile()) {
+    // Desktop: hide button, reset menu
+    menuBtn.style.display = "none";
     verticalMenu.classList.remove('show');
     submenu.style.maxHeight = "0px";
     lowerMenu.style.transform = "translateY(0px)";
-    menuBtn.style.display = "none";
+    menuOpen = false;
+    submenuOpen = false;
     return;
   }
 
   menuBtn.style.display = "flex";
 
-  // Reset state
-  menuOpen = false;
-  submenuOpen = false;
+  // Ensure menu starts closed
   verticalMenu.classList.remove('show');
   submenu.style.maxHeight = "0px";
   lowerMenu.style.transform = "translateY(0px)";
+  menuOpen = false;
+  submenuOpen = false;
 
-  // Remove previous listeners to avoid duplicates
+  // Remove old listeners (optional, just in case)
   menuBtn.replaceWith(menuBtn.cloneNode(true));
   collectionsBtn.replaceWith(collectionsBtn.cloneNode(true));
 
@@ -408,9 +413,10 @@ function initMobileMenu() {
   // Toggle main menu
   newMenuBtn.addEventListener('click', () => {
     menuOpen = !menuOpen;
-    if (menuOpen) verticalMenu.classList.add('show');
-    else {
-      verticalMenu.classList.remove('show');
+    verticalMenu.classList.toggle('show', menuOpen);
+
+    // Always close submenu if main menu closes
+    if (!menuOpen) {
       submenu.style.maxHeight = "0px";
       lowerMenu.style.transform = "translateY(0px)";
       submenuOpen = false;
@@ -433,9 +439,10 @@ function initMobileMenu() {
 
 // Initialize on load
 window.addEventListener('load', initMobileMenu);
-// Update on resize/rotation
+// Update on resize / rotation
 window.addEventListener('resize', initMobileMenu);
 </script>
+
 
 </body>
 </html>
