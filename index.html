@@ -369,30 +369,37 @@ verticalMenu.addEventListener('mouseleave', () => {
 
 </script>
 <script>
+const verticalMenu = document.querySelector('.vertical-menu');
+const menuBtn = document.getElementById('menuBtn');
+const collectionsBtn = document.getElementById('collectionsBtn');
+const submenu = document.getElementById('submenu');
+const lowerMenu = document.getElementById('lowerMenu');
+
+// ---------------------------
+// MOBILE / iPad MENU FIX
+// ---------------------------
 function initMobileMenu() {
-  const menuBtn = document.getElementById('menuBtn');
-  const verticalMenu = document.querySelector('.vertical-menu');
-  const collectionsBtn = document.getElementById('collectionsBtn');
-  const submenu = document.getElementById('submenu');
-  const lowerMenu = document.getElementById('lowerMenu');
+  // Only enable on small screens (<=1024px)
+  if (window.innerWidth <= 1024 && ('ontouchstart' in window || navigator.maxTouchPoints > 0)) {
 
-  // Remove existing listeners to prevent duplicates
-  menuBtn.replaceWith(menuBtn.cloneNode(true));
-  collectionsBtn.replaceWith(collectionsBtn.cloneNode(true));
+    // Remove old event listeners first to prevent duplicates
+    menuBtn.replaceWith(menuBtn.cloneNode(true));
+    collectionsBtn.replaceWith(collectionsBtn.cloneNode(true));
 
-  const menuBtnNew = document.getElementById('menuBtn');
-  const collectionsBtnNew = document.getElementById('collectionsBtn');
+    const newMenuBtn = document.getElementById('menuBtn');
+    const newCollectionsBtn = document.getElementById('collectionsBtn');
 
-  if (window.innerWidth <= 1024) {
     // Toggle main menu
-    menuBtnNew.addEventListener('click', () => {
+    newMenuBtn.addEventListener('click', () => {
       verticalMenu.classList.toggle('show');
+
+      // Always close submenu when main menu toggles
       submenu.style.maxHeight = "0px";
       lowerMenu.style.transform = "translateY(0px)";
     });
 
     // Toggle submenu under Collections
-    collectionsBtnNew.addEventListener('click', (e) => {
+    newCollectionsBtn.addEventListener('click', (e) => {
       e.preventDefault();
       const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== "0px";
       if (isOpen) {
@@ -403,20 +410,21 @@ function initMobileMenu() {
         lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
       }
     });
-  } else {
-    // Ensure menu is hidden on desktop
-    verticalMenu.classList.remove('show');
-    submenu.style.maxHeight = "0px";
-    lowerMenu.style.transform = "translateY(0px)";
   }
 }
 
-// Initialize menu on load
+// Initialize menu on page load
 window.addEventListener('load', initMobileMenu);
 
-// Re-initialize menu on resize (iPad rotate, etc.)
-window.addEventListener('resize', initMobileMenu);
+// Re-initialize menu if window is resized (for rotation)
+window.addEventListener('resize', () => {
+  verticalMenu.classList.remove('show'); // hide menu if rotated
+  submenu.style.maxHeight = "0px";
+  lowerMenu.style.transform = "translateY(0px)";
+  initMobileMenu();
+});
 </script>
+
 
 
 </body>
