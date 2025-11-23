@@ -381,22 +381,13 @@ const lowerMenu = document.getElementById('lowerMenu');
 const isTouchMobile = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 1024;
 
 if (isTouchMobile) {
-  const menuBtn = document.getElementById('menuBtn');
-  const verticalMenu = document.querySelector('.vertical-menu');
-  const collectionsBtn = document.getElementById('collectionsBtn');
-  const submenu = document.getElementById('submenu');
-  const lowerMenu = document.getElementById('lowerMenu');
-
   // Toggle main menu
   menuBtn.addEventListener('click', () => {
-    const isOpen = verticalMenu.classList.contains('show');
-
+    verticalMenu.classList.toggle('show');
+    
     // Always close submenu when main menu toggles
     submenu.style.maxHeight = "0px";
     lowerMenu.style.transform = "translateY(0px)";
-
-    // Toggle main menu
-    verticalMenu.classList.toggle('show', !isOpen);
   });
 
   // Toggle submenu under Collections
@@ -413,7 +404,7 @@ if (isTouchMobile) {
   });
 }
 
-
+  
 </script>
 
 </body>
