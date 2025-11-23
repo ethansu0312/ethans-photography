@@ -68,7 +68,7 @@
     text-decoration: none !important;
     color: #fff !important;
     padding: 20px 0;
-    font-size: 2.3rem;
+    font-size: 2.5rem;
     transition: transform .2s, color .2s, text-shadow .2s;
     position: relative;
   }
@@ -92,7 +92,7 @@
 
   .submenu a { 
     min-width: 160px; 
-    font-size: 1.8rem; 
+    font-size: 2rem; 
     color:#fff; 
     text-decoration:none!important;
     transition: transform .2s, text-shadow .2s;
@@ -146,6 +146,12 @@
     .vertical-menu { top: calc(50% - 160px); }
 
     #lowerMenu { transition: transform .5s ease; }
+  }
+
+  /* iPad-specific styles (larger text for tablets) */
+  @media screen and (min-width: 768px) and (max-width: 1366px) {
+    .vertical-menu .menu-item { font-size: 2.5rem; }
+    .vertical-menu .submenu a { font-size: 2rem; }
   }
 </style>
 </head>
