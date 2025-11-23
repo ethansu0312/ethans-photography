@@ -28,7 +28,12 @@ h1 {
   align-items: flex-end;
   transform: scaleY(1.7);
 }
-.gallery { column-count:4; column-gap:15px; padding:100px; }
+.gallery { 
+  column-count:4; 
+  column-gap:15px; 
+  padding:100px;
+  column-fill: balance; /* Force proper column distribution */
+}
 .gallery img { 
   width:100%; 
   margin-bottom:15px; 
