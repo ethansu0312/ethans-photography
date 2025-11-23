@@ -161,13 +161,13 @@ background: linear-gradient(to right,
     transition: transform 0.5s ease;
   }
 /* Mobile: iPhones, small tablets, portrait mode */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
   /* Completely remove the hero glow on mobile */
   .hero::before {
     display: none !important;
   }
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
   /* Circular button on bottom-left */
   .mobile-menu-btn {
     position: fixed;
@@ -191,7 +191,7 @@ background: linear-gradient(to right,
   }
 }
 /* Mobile-only styles */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
 
   /* Circular button at bottom-left */
   #menuBtn {
@@ -239,13 +239,13 @@ background: linear-gradient(to right,
   }
 }
 /* MOBILE MENU SHIFT UP */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .vertical-menu {
     top: calc(50% - 180px);  /* moves menu upward */
   }
 }
 /* MOBILE — Smooth up/down shift for Archive + Connect */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   #lowerMenu {
     transition: transform 0.5s ease;
   }
@@ -350,7 +350,7 @@ verticalMenu.addEventListener('mouseleave', () => {
   hero.classList.remove('pause-glow');
 });
 // Mobile menu toggle
-if (window.innerWidth <= 768) {
+if (window.innerWidth <= 1024) {
   const menuBtn = document.getElementById('menuBtn');
 
   menuBtn.addEventListener('click', () => {
@@ -358,7 +358,7 @@ if (window.innerWidth <= 768) {
   });
 }
 // MOBILE: toggle submenu + move Archive & Connect
-if (window.innerWidth <= 768) {
+if (window.innerWidth <= 1024) {
   const collectionsBtn = document.getElementById('collectionsBtn');
   const submenu = document.getElementById('submenu');
   const lowerMenu = document.getElementById('lowerMenu');
@@ -388,7 +388,7 @@ const submenu = document.getElementById('submenu');
 const lowerMenu = document.getElementById('lowerMenu');
 
 // MOBILE ONLY
-if (window.innerWidth <= 768) {
+if (window.innerWidth <= 1024) {
   // Mobile menu button toggle
   menuBtn.addEventListener('click', () => {
     verticalMenu.classList.toggle('show');
@@ -407,6 +407,8 @@ if (window.innerWidth <= 768) {
     }
   });
 }
+if ('ontouchstart' in window || navigator.maxTouchPoints > 0) { ... }
+
 </script>
 
 </body>
