@@ -255,6 +255,22 @@ background: linear-gradient(to right,
     display: none !important;
   }
 }
+/* Ensure menu button appears on iPads (portrait & landscape) */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  #menuBtn {
+    display: flex !important; /* show the hamburger */
+  }
+
+  /* Remove hero glow on iPads just like iPhones */
+  .hero::before {
+    display: none !important;
+  }
+
+  /* Optional: adjust vertical menu top position like iPhone */
+  .vertical-menu {
+    top: calc(50% - 180px); /* same as iPhone shift */
+  }
+}
 
 </style>
 </head>
@@ -408,6 +424,34 @@ if (window.innerWidth <= 1024) {
   });
 }
 if ('ontouchstart' in window || navigator.maxTouchPoints > 0) { ... }
+// Detect touch devices with width <= 1024 (iPhones + iPads)
+const isTouchMobile = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 1024;
+
+if (isTouchMobile) {
+  const menuBtn = document.getElementById('menuBtn');
+  const verticalMenu = document.querySelector('.vertical-menu');
+  const collectionsBtn = document.getElementById('collectionsBtn');
+  const submenu = document.getElementById('submenu');
+  const lowerMenu = document.getElementById('lowerMenu');
+
+  // Toggle vertical menu
+  menuBtn.addEventListener('click', () => {
+    verticalMenu.classList.toggle('show');
+  });
+
+  // Toggle submenu under Collections
+  collectionsBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== "0px";
+    if (isOpen) {
+      submenu.style.maxHeight = "0px";
+      lowerMenu.style.transform = "translateY(0px)";
+    } else {
+      submenu.style.maxHeight = submenu.scrollHeight + "px";
+      lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
+    }
+  });
+}
 
 </script>
 
