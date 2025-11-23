@@ -317,5 +317,97 @@
 
 })();
 </script>
+<script>
+(function() {
+  const verticalMenu = document.querySelector('.vertical-menu');
+  const hoverZone = document.querySelector('.hover-zone');
+  const hero = document.querySelector('.hero');
+  const collectionsWrapper = document.querySelector('.collections-wrapper');
+  const submenu = document.getElementById('submenu');
+  const lowerMenu = document.getElementById('lowerMenu');
+  const menuBtn = document.getElementById('menuBtn');
+  const collectionsBtn = document.getElementById('collectionsBtn');
+
+  // Desktop hover functions (UNCHANGED)
+  function desktopHoverOpen() { verticalMenu.style.left='30px'; hero.classList.add('pause-glow'); }
+  function desktopHoverClose() { verticalMenu.style.left='-160px'; hero.classList.remove('pause-glow'); submenu.style.maxHeight='0px'; lowerMenu.style.transform='translateY(0px)'; }
+  function desktopCollectionsEnter() { submenu.style.maxHeight = submenu.scrollHeight + 'px'; lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`; }
+  function desktopCollectionsLeave() { submenu.style.maxHeight='0px'; lowerMenu.style.transform='translateY(0px)'; }
+
+  // TOUCH detection for iPhone + iPad (no screen width check!)
+  function isTouchDevice() {
+    return ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  }
+
+  // Mobile listeners (iPhone + iPad)
+  function setupMobileListeners() {
+    if (!menuBtn._attached) {
+      menuBtn.addEventListener('click', function() {
+        if (!isTouchDevice()) return; // desktop unaffected
+        verticalMenu.classList.toggle('show');
+        if (!verticalMenu.classList.contains('show')) { submenu.style.maxHeight='0px'; lowerMenu.style.transform='translateY(0px)'; }
+      });
+      menuBtn._attached = true;
+    }
+
+    if (!collectionsBtn._attached) {
+      collectionsBtn.addEventListener('click', function(e) {
+        if (!isTouchDevice()) return; // desktop unaffected
+        e.preventDefault();
+        const open = submenu.style.maxHeight && submenu.style.maxHeight !== '0px';
+        if (open) { submenu.style.maxHeight='0px'; lowerMenu.style.transform='translateY(0px)'; }
+        else { submenu.style.maxHeight = submenu.scrollHeight + 'px'; lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`; }
+      });
+      collectionsBtn._attached = true;
+    }
+  }
+
+  let desktopEnabled = false;
+  function enableDesktopHover() {
+    if (desktopEnabled) return;
+    hoverZone.addEventListener('mouseenter', desktopHoverOpen);
+    hoverZone.addEventListener('mouseleave', desktopHoverClose);
+    verticalMenu.addEventListener('mouseenter', desktopHoverOpen);
+    verticalMenu.addEventListener('mouseleave', desktopHoverClose);
+    collectionsWrapper.addEventListener('mouseenter', desktopCollectionsEnter);
+    collectionsWrapper.addEventListener('mouseleave', desktopCollectionsLeave);
+    desktopEnabled = true;
+  }
+
+  function disableDesktopHover() {
+    if (!desktopEnabled) return;
+    hoverZone.removeEventListener('mouseenter', desktopHoverOpen);
+    hoverZone.removeEventListener('mouseleave', desktopHoverClose);
+    verticalMenu.removeEventListener('mouseenter', desktopHoverOpen);
+    verticalMenu.removeEventListener('mouseleave', desktopHoverClose);
+    collectionsWrapper.removeEventListener('mouseenter', desktopCollectionsEnter);
+    collectionsWrapper.removeEventListener('mouseleave', desktopCollectionsLeave);
+    desktopEnabled = false;
+  }
+
+  function updateMode() {
+    const touch = isTouchDevice();
+    menuBtn.style.display = touch ? 'flex' : 'none';
+    if (touch) {
+      disableDesktopHover(); // desktop hover untouched
+      verticalMenu.classList.remove('show');
+      submenu.style.maxHeight='0px';
+      lowerMenu.style.transform='translateY(0px)';
+    } else {
+      enableDesktopHover(); // exactly your original desktop code
+      verticalMenu.style.left='-160px';
+      verticalMenu.classList.remove('show');
+      submenu.style.maxHeight='0px';
+      lowerMenu.style.transform='translateY(0px)';
+    }
+  }
+
+  setupMobileListeners();
+  window.addEventListener('load', updateMode);
+  window.addEventListener('resize', updateMode);
+
+})();
+</script>
+
 </body>
 </html>
