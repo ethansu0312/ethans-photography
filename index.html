@@ -211,7 +211,7 @@
 
   // utility
   function isTouchMobile() {
-    return ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 1024;
+    return ('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }
 
   // Setup mobile listeners once (they check isTouchMobile inside)
