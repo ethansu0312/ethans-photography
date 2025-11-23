@@ -20,14 +20,12 @@ h1 { text-align:center; padding:20px 0; margin:0; text-transform:capitalize; }
   align-items: flex-end;
   transform: scaleY(1.7);       /* stretches the text vertically */
 }
-
 .gallery { column-count:4; column-gap:15px; padding:100px; }
 .gallery img { width:100%; margin-bottom:15px; border-radius:8px; transition:transform 0.3s; display:block; cursor:pointer; }
 .gallery img:hover { transform:scale(1.05); }
 @media (max-width:1200px){ .gallery{column-count:3;} }
 @media (max-width:900px){ .gallery{column-count:2;} }
 @media (max-width:600px){ .gallery{column-count:1;} }
-
 #lightbox { position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.75); display:none; justify-content:center; align-items:center; z-index:9999; cursor:zoom-out; }
 #lightbox img { max-width:90%; max-height:90%; border-radius:10px; box-shadow:0 0 30px rgba(0,0,0,0.8); }
 .back-button {
@@ -41,10 +39,20 @@ h1 { text-align:center; padding:20px 0; margin:0; text-transform:capitalize; }
     transition: color 0.2s, opacity 0.3s;
     z-index: 1000;
 }
-
 .back-button:hover {
     color: #ccc;
 }
+
+/* iPad-specific adjustments (768px to 1366px) */
+@media screen and (min-width: 769px) and (max-width: 1366px) {
+  #category-title {
+    font-size: 15vw;               /* smaller font to prevent overlap */
+    height: 40vh;                  /* reduce height */
+    align-items: center;           /* center vertically */
+    transform: scaleY(1.5);        /* slightly less stretch */
+  }
+}
+
 /* Mobile-only adjustments for Architecture title */
 @media screen and (max-width: 768px) {
   #category-title {
@@ -53,17 +61,13 @@ h1 { text-align:center; padding:20px 0; margin:0; text-transform:capitalize; }
     transform: scaleY(1.7) !important; /* keep your vertical stretch */
   }
 }
-
 </style>
 </head>
 <body>
-
 <a href="../index.html" class="back-button">← Back</a>
-
 <h1 id="category-title"></h1>
 <div class="gallery" id="gallery"></div>
 <div id="lightbox"><img src="" alt="Enlarged Photo"></div>
-
 <script>
 const title=document.getElementById('category-title');
 const text="Cars";
@@ -80,7 +84,6 @@ function typeWriterSmooth(){
   } 
 }
 window.addEventListener('DOMContentLoaded', typeWriterSmooth);
-
 const gallery=document.querySelector('#gallery');
 const lightbox=document.getElementById('lightbox');
 const lightboxImg=lightbox.querySelector('img');
@@ -95,7 +98,6 @@ for(let j=1;j<=20;j++){
   gallery.appendChild(img);
 }
 lightbox.addEventListener('click',()=>{ lightbox.style.display='none'; });
-
 // Fade back button based on title visibility
 const backButton = document.querySelector('.back-button');
 window.addEventListener('scroll', () => {
@@ -109,6 +111,5 @@ window.addEventListener('scroll', () => {
   }
 });
 </script>
-
 </body>
 </html>
