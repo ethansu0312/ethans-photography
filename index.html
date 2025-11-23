@@ -365,34 +365,6 @@ verticalMenu.addEventListener('mouseenter', () => {
 verticalMenu.addEventListener('mouseleave', () => {
   hero.classList.remove('pause-glow');
 });
-// Mobile menu toggle
-if (window.innerWidth <= 1024) {
-  const menuBtn = document.getElementById('menuBtn');
-
-  menuBtn.addEventListener('click', () => {
-    verticalMenu.classList.toggle('show');
-  });
-}
-// MOBILE: toggle submenu + move Archive & Connect
-if (window.innerWidth <= 1024) {
-  const collectionsBtn = document.getElementById('collectionsBtn');
-  const submenu = document.getElementById('submenu');
-  const lowerMenu = document.getElementById('lowerMenu');
-
-  collectionsBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-
-    const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== "0px";
-
-    if (isOpen) {
-      submenu.style.maxHeight = "0px";
-      lowerMenu.style.transform = "translateY(0px)";
-    } else {
-      submenu.style.maxHeight = submenu.scrollHeight + "px";
-      lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
-    }
-  });
-}
 
 
 </script>
@@ -403,28 +375,9 @@ const collectionsBtn = document.getElementById('collectionsBtn');
 const submenu = document.getElementById('submenu');
 const lowerMenu = document.getElementById('lowerMenu');
 
-// MOBILE ONLY
-if (window.innerWidth <= 1024) {
-  // Mobile menu button toggle
-  menuBtn.addEventListener('click', () => {
-    verticalMenu.classList.toggle('show');
-  });
-
-  // Mobile submenu toggle
-  collectionsBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== "0px";
-    if (isOpen) {
-      submenu.style.maxHeight = "0px";
-      lowerMenu.style.transform = "translateY(0px)";
-    } else {
-      submenu.style.maxHeight = submenu.scrollHeight + "px";
-      lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
-    }
-  });
-}
-if ('ontouchstart' in window || navigator.maxTouchPoints > 0) { ... }
-// Detect touch devices with width <= 1024 (iPhones + iPads)
+// ---------------------------
+// MOBILE / iPad MENU FIX
+// ---------------------------
 const isTouchMobile = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 1024;
 
 if (isTouchMobile) {
@@ -434,9 +387,16 @@ if (isTouchMobile) {
   const submenu = document.getElementById('submenu');
   const lowerMenu = document.getElementById('lowerMenu');
 
-  // Toggle vertical menu
+  // Toggle main menu
   menuBtn.addEventListener('click', () => {
-    verticalMenu.classList.toggle('show');
+    const isOpen = verticalMenu.classList.contains('show');
+
+    // Always close submenu when main menu toggles
+    submenu.style.maxHeight = "0px";
+    lowerMenu.style.transform = "translateY(0px)";
+
+    // Toggle main menu
+    verticalMenu.classList.toggle('show', !isOpen);
   });
 
   // Toggle submenu under Collections
@@ -452,6 +412,7 @@ if (isTouchMobile) {
     }
   });
 }
+
 
 </script>
 
