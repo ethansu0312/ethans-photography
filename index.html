@@ -69,8 +69,13 @@
     color: #fff !important;
     padding: 20px 0;
     font-size: 2.3rem;
-    transition: transform .2s, color .2s;
+    transition: transform .2s, color .2s, text-shadow .2s;
     position: relative;
+  }
+
+  .menu-item:hover {
+    transform: translateX(5px);
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
   }
 
   .submenu {
@@ -85,7 +90,19 @@
     transition: max-height .4s ease;
   }
 
-  .submenu a { min-width: 160px; font-size: 1.8rem; color:#fff; text-decoration:none!important; }
+  .submenu a { 
+    min-width: 160px; 
+    font-size: 1.8rem; 
+    color:#fff; 
+    text-decoration:none!important;
+    transition: transform .2s, text-shadow .2s;
+    display: inline-block;
+  }
+
+  .submenu a:hover {
+    transform: translateX(5px);
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+  }
 
   .lower-menu { display:flex; flex-direction:column; transition: transform .5s ease; }
 
