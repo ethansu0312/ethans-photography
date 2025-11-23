@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ethan's Photography</title>
 <style>
-  /* Your existing styles, slightly consolidated where needed */
+  /* Font integration */
   @font-face {
     font-family: 'BebasNeue';
     src: url('BebasNeue-Regular.ttf') format('truetype');
@@ -17,62 +17,110 @@
     margin: 0;
     background: #000;
     color: #fff;
-    font-family: 'BebasNeue', sans-serif;
+    font-family: 'BebasNeue', sans-serif; /* UPDATED FONT ONLY */
   }
 
   .hero {
+    width: 100vw;
+    height: 100vh;
+    background: url('my-hero.jpg') center/cover no-repeat; /* CHANGED ONLY THIS LINE */
+    position: relative;
+  }
+
+.hero {
     position: relative;
     width: 100vw;
     height: 100vh;
     background: url('my-hero.jpg') center/cover no-repeat;
-    overflow: hidden;
-  }
+    overflow: hidden; /* ensure pseudo-element is clipped */
+}
 
-  .hero::before {
+.hero::before {
     content: "";
     position: absolute;
-    top: 0; left: 0;
-    width: 60px; height: 100%;
+    top: 0;
+    left: 0;
+    width: 60px; /* glow width */
+    height: 100%;
     pointer-events: none;
-    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 20%, transparent 100%);
-    z-index: 5;
+background: linear-gradient(to right,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 20%,
+    transparent 100%
+);
+    z-index: 5; /* above image, below menu */
     animation: pulseGlow 3s infinite ease-in-out;
-  }
+}
 
-  @keyframes pulseGlow { 0%,100%{opacity:.05}50%{opacity:.4} }
-  .hero.pause-glow::before { animation-play-state: paused !important; }
+@keyframes pulseGlow {
+    0%, 100% { opacity: 0.05; }
+    50% { opacity: 0.4; }
+}
 
-  .hero::after{
-    content:"";
-    position:absolute; top:0; left:0; width:100%; height:100%;
-    background: rgba(0,0,0,0.25); pointer-events:none;
-  }
+/* Pause glow when .pause-glow is added */
+.hero.pause-glow::before {
+    animation-play-state: paused !important;
+}
 
-  /* Desktop vertical menu (default) */
+
+.hero::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.25); /* adjust darkness (0.25 = light, 0.5 = darker) */
+    pointer-events: none; /* so overlay doesn't block menu hover */
+}
+
+
+  /* Vertical menu initially hidden off-screen */
   .vertical-menu {
     position: fixed;
-    left: -160px;
-    top: calc(50% - 130px);
+    left: -160px; /* hidden off-screen */
+    top: calc(50% - 130px); /* moved 50px upward */
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
     z-index: 100;
-    transition: left 0.35s ease;
+    transition: left 0.4s ease; /* smooth slide */
   }
 
+  /* Hover zone on the left edge to trigger menu */
   .hover-zone {
-    position: fixed; left: 0; top: 0; width: 120px; height: 100vh; z-index: 50;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 120px;  /* increased hover width */
+    height: 100vh;
+    z-index: 50;
   }
 
-  .menu-item, .menu-item:link, .menu-item:visited {
+  /* Main menu and submenu links */
+  .menu-item,
+  .menu-item:link,
+  .menu-item:visited,
+  .menu-item:hover,
+  .menu-item:active,
+  .menu-item:focus {
     text-decoration: none !important;
     color: #fff !important;
     padding: 20px 0;
     font-size: 2rem;
-    transition: transform .2s, color .2s;
+    transition: transform 0.2s, color 0.2s;
     position: relative;
   }
 
+  .menu-item:hover,
+  .menu-item:focus,
+  .menu-item:active {
+    transform: translateX(5px);
+    color: #ccc !important;
+    text-decoration: none !important;
+  }
+
+  /* Submenu under Collections */
   .submenu {
     position: absolute;
     top: 100%;
@@ -82,70 +130,45 @@
     gap: 8px;
     max-height: 0;
     overflow: hidden;
-    transition: max-height .4s ease;
+    transition: max-height 0.5s ease;
   }
 
-  .submenu a { min-width: 160px; font-size: 1.5rem; color:#fff; text-decoration:none!important; }
-
-  .lower-menu { display:flex; flex-direction:column; transition: transform .5s ease; }
-
-  /* MOBILE STYLES */
-  @media screen and (max-width: 1024px) {
-    .hero::before { display: none !important; }
-
-    /* Mobile menu button */
-    #menuBtn {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: #fff;
-      z-index: 1001;
-      display: flex; /* JS will show it on touch/mobile */
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 2rem;
-      color: #000;
-    }
-
-    .vertical-menu {
-      left: -200px; /* hidden for mobile */
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 1000;
-      transition: left 0.35s ease;
-      background: transparent;
-    }
-
-    .vertical-menu.show { left: 20px; }
-
-    .vertical-menu .menu-item { font-size: 1.5rem; padding: 10px 0; color: #fff; }
-    .vertical-menu .submenu a { font-size: 1.3rem; padding: 8px 0; }
-
-    /* adjust vertical position on small screens */
-    .vertical-menu { top: calc(50% - 180px); }
-
-    #lowerMenu { transition: transform .5s ease; }
+  .submenu a,
+  .submenu a:link,
+  .submenu a:visited,
+  .submenu a:hover,
+  .submenu a:active,
+  .submenu a:focus {
+    text-decoration: none !important;
+    color: #fff !important;
+    font-size: 1.5rem; /* smaller than main menu */
+    transition: transform 0.2s, color 0.2s;
+    min-width: 160px;
   }
 
-  @media screen and (min-width: 769px) {
-    /* desktop: hide the mobile button */
-    #menuBtn { display: none !important; }
+  .submenu a:hover,
+  .submenu a:focus,
+  .submenu a:active {
+    transform: translateX(5px);
+    color: #aaa !important;
+    text-decoration: none !important;
+  }
+
+  /* Container for Archive + Connect that moves down */
+  .lower-menu {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.5s ease;
   }
 </style>
 </head>
 <body>
 
 <div class="hero">
+  <!-- Hover zone -->
   <div class="hover-zone"></div>
 
-  <!-- Mobile menu button (shown by JS only on touch devices) -->
-  <div id="menuBtn" aria-label="menu" role="button">&#9776;</div>
-
-  <div class="vertical-menu" aria-hidden="true">
+  <div class="vertical-menu">
     <a href="origin/index.html" class="menu-item" id="origin">Origin</a>
 
     <div class="menu-item collections-wrapper">
@@ -165,157 +188,71 @@
   </div>
 </div>
 
-<!-- ===== JS: clean, single source of truth for desktop/mobile ===== -->
 <script>
-(function() {
-  // element refs
-  const verticalMenu = document.querySelector('.vertical-menu');
-  const hoverZone = document.querySelector('.hover-zone');
-  const hero = document.querySelector('.hero');
-  const collectionsWrapper = document.querySelector('.collections-wrapper');
-  const submenu = document.getElementById('submenu');
-  const lowerMenu = document.getElementById('lowerMenu');
+const collectionsWrapper = document.querySelector('.collections-wrapper');
+const submenu = document.getElementById('submenu');
+const lowerMenu = document.getElementById('lowerMenu');
+const verticalMenu = document.querySelector('.vertical-menu');
+const hoverZone = document.querySelector('.hover-zone');
 
-  const menuBtn = document.getElementById('menuBtn');
-  const collectionsBtn = document.getElementById('collectionsBtn');
+// Dropdown submenu hover events
+collectionsWrapper.addEventListener('mouseenter', () => {
+  submenu.style.maxHeight = submenu.scrollHeight + 'px';
+  lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
+});
 
-  // sanity
-  if (!verticalMenu || !menuBtn || !collectionsBtn || !submenu || !lowerMenu || !hoverZone || !collectionsWrapper) {
-    console.error('MENU INIT: missing element(s)', {
-      verticalMenu: !!verticalMenu, menuBtn: !!menuBtn, collectionsBtn: !!collectionsBtn,
-      submenu: !!submenu, lowerMenu: !!lowerMenu, hoverZone: !!hoverZone, collectionsWrapper: !!collectionsWrapper
-    });
-    return;
-  }
+collectionsWrapper.addEventListener('mouseleave', () => {
+  submenu.style.maxHeight = '0';
+  lowerMenu.style.transform = `translateY(0px)`;
+});
 
-  // handlers references so we can add/remove cleanly
-  function desktopHoverOpen() {
-    verticalMenu.style.left = '30px';
-    hero.classList.add('pause-glow');
-  }
-  function desktopHoverClose() {
-    verticalMenu.style.left = '-160px';
-    hero.classList.remove('pause-glow');
-    // also collapse submenu when leaving
-    submenu.style.maxHeight = '0px';
-    lowerMenu.style.transform = 'translateY(0px)';
-  }
-  function desktopCollectionsEnter() {
-    submenu.style.maxHeight = submenu.scrollHeight + 'px';
-    lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
-  }
-  function desktopCollectionsLeave() {
-    submenu.style.maxHeight = '0px';
-    lowerMenu.style.transform = 'translateY(0px)';
-  }
+submenu.addEventListener('mouseenter', () => {
+  submenu.style.maxHeight = submenu.scrollHeight + 'px';
+  lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
+});
 
-  // utility
-  function isTouchMobile() {
-    return ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 1024;
-  }
+submenu.addEventListener('mouseleave', () => {
+  submenu.style.maxHeight = '0';
+  lowerMenu.style.transform = `translateY(0px)`;
+});
 
-  // Setup mobile listeners once (they check isTouchMobile inside)
-  function setupMobileListeners() {
-    // main menu button: toggles class .show
-    // single handler, always present, but will no-op on desktop
-    if (!menuBtn._mobileListenerAttached) {
-      menuBtn.addEventListener('click', function (e) {
-        if (!isTouchMobile()) return;
-        verticalMenu.classList.toggle('show');
-        // if menu closed, collapse submenu
-        if (!verticalMenu.classList.contains('show')) {
-          submenu.style.maxHeight = '0px';
-          lowerMenu.style.transform = 'translateY(0px)';
-        }
-      });
-      menuBtn._mobileListenerAttached = true;
-    }
+// Slide-out menu on hover
+hoverZone.addEventListener('mouseenter', () => {
+  verticalMenu.style.left = '30px'; // visible position, 30px from left
+});
 
-    // collections button toggles submenu on mobile (and prevents default)
-    if (!collectionsBtn._mobileListenerAttached) {
-      collectionsBtn.addEventListener('click', function (e) {
-        if (!isTouchMobile()) return; // desktop will use hover
-        e.preventDefault();
-        const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== '0px';
-        if (isOpen) {
-          submenu.style.maxHeight = '0px';
-          lowerMenu.style.transform = 'translateY(0px)';
-        } else {
-          submenu.style.maxHeight = submenu.scrollHeight + 'px';
-          lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
-        }
-      });
-      collectionsBtn._mobileListenerAttached = true;
-    }
-  }
+hoverZone.addEventListener('mouseleave', () => {
+  verticalMenu.style.left = '-160px'; // hidden position
+});
 
-  // Enable desktop hover behavior: add event listeners
-  let desktopEnabled = false;
-  function enableDesktopHover() {
-    if (desktopEnabled) return;
-    hoverZone.addEventListener('mouseenter', desktopHoverOpen);
-    hoverZone.addEventListener('mouseleave', desktopHoverClose);
-    verticalMenu.addEventListener('mouseenter', desktopHoverOpen);
-    verticalMenu.addEventListener('mouseleave', desktopHoverClose);
+verticalMenu.addEventListener('mouseenter', () => {
+  verticalMenu.style.left = '30px';
+});
 
-    collectionsWrapper.addEventListener('mouseenter', desktopCollectionsEnter);
-    collectionsWrapper.addEventListener('mouseleave', desktopCollectionsLeave);
-    desktopEnabled = true;
-    console.log('MENU: desktop hover enabled');
-  }
+verticalMenu.addEventListener('mouseleave', () => {
+  verticalMenu.style.left = '-160px';
+});
 
-  // Disable desktop hover behavior: remove event listeners
-  function disableDesktopHover() {
-    if (!desktopEnabled) return;
-    hoverZone.removeEventListener('mouseenter', desktopHoverOpen);
-    hoverZone.removeEventListener('mouseleave', desktopHoverClose);
-    verticalMenu.removeEventListener('mouseenter', desktopHoverOpen);
-    verticalMenu.removeEventListener('mouseleave', desktopHoverClose);
+// Pause hero glow on menu hover
+const hero = document.querySelector('.hero');
 
-    collectionsWrapper.removeEventListener('mouseenter', desktopCollectionsEnter);
-    collectionsWrapper.removeEventListener('mouseleave', desktopCollectionsLeave);
-    desktopEnabled = false;
-    console.log('MENU: desktop hover disabled');
-  }
+hoverZone.addEventListener('mouseenter', () => {
+  hero.classList.add('pause-glow');
+});
 
-  // initialize UI state depending on device
-  function updateMode() {
-    const mobile = isTouchMobile();
-    // show or hide mobile button
-    menuBtn.style.display = mobile ? 'flex' : 'none';
+hoverZone.addEventListener('mouseleave', () => {
+  hero.classList.remove('pause-glow');
+});
 
-    if (mobile) {
-      // disable hover behaviours that fight the mobile toggle
-      disableDesktopHover();
-      // ensure menu closed initially
-      verticalMenu.classList.remove('show');
-      submenu.style.maxHeight = '0px';
-      lowerMenu.style.transform = 'translateY(0px)';
-    } else {
-      // enable desktop hover logic
-      enableDesktopHover();
-      // ensure menu uses desktop left values (and hidden)
-      verticalMenu.style.left = '-160px';
-      verticalMenu.classList.remove('show');
-      submenu.style.maxHeight = '0px';
-      lowerMenu.style.transform = 'translateY(0px)';
-    }
-  }
+verticalMenu.addEventListener('mouseenter', () => {
+  hero.classList.add('pause-glow');
+});
 
-  // run once and on resize
-  setupMobileListeners(); // attach persistent mobile listeners (no clones)
-  window.addEventListener('load', updateMode);
-  window.addEventListener('resize', updateMode);
+verticalMenu.addEventListener('mouseleave', () => {
+  hero.classList.remove('pause-glow');
+});
 
-  // For debugging: log clicks and states (remove logs later if you want)
-  menuBtn.addEventListener('click', () => {
-    console.log('MENU: menuBtn clicked; show class present:', verticalMenu.classList.contains('show'), 'isTouchMobile:', isTouchMobile(), 'innerWidth:', window.innerWidth);
-  });
-  collectionsBtn.addEventListener('click', () => {
-    console.log('MENU: collectionsBtn clicked; submenu height:', submenu.style.maxHeight);
-  });
-
-})();
 </script>
+
 </body>
 </html>
