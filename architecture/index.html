@@ -30,9 +30,9 @@ h1 {
   padding-top: 80px;
 }
 .gallery { 
-  column-count:4; 
-  column-gap:15px; 
-  padding:100px;
+  column-count:2; 
+  column-gap:10px; 
+  padding:30px 20px;
 }
 .gallery img { 
   width:100%; 
@@ -42,6 +42,7 @@ h1 {
   display:block; 
   cursor:pointer;
   opacity: 0;
+  break-inside: avoid;
 }
 .gallery img.loaded { opacity: 1; }
 .gallery img:hover { transform:scale(1.05); }
@@ -102,17 +103,8 @@ h1 {
 .back-button:hover {
     color: #ccc;
 }
-/* iPad and Computer - 4 columns (768px and above) */
-@media screen and (min-width: 768px) {
-  .gallery { 
-    column-count: 4;
-    padding: 100px;
-  }
-  #category-title {
-    padding-top: 80px;
-  }
-}
-/* iPhone only - 2 columns (below 768px) */
+
+/* Mobile/iPhone - 2 columns (default, up to 767px) */
 @media screen and (max-width: 767px) {
   #category-title {
     height: 30vh;
@@ -121,9 +113,21 @@ h1 {
     padding-top: 60px;
   }
   .gallery { 
-    column-count: 2;
+    column-count: 2 !important;
     padding: 30px 20px;
     column-gap: 10px;
+  }
+}
+
+/* iPad and Desktop - 4 columns (768px and above) */
+@media screen and (min-width: 768px) {
+  .gallery { 
+    column-count: 4 !important;
+    column-gap: 15px;
+    padding: 100px;
+  }
+  #category-title {
+    padding-top: 80px;
   }
 }
 </style>
