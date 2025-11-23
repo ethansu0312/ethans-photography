@@ -379,27 +379,19 @@ const lowerMenu = document.getElementById('lowerMenu');
 // MOBILE / iPad MENU FIX
 // ---------------------------
 function initMobileMenu() {
-  // Only enable on small screens (<=1024px)
   if (window.innerWidth <= 1024 && ('ontouchstart' in window || navigator.maxTouchPoints > 0)) {
 
-    // Remove old event listeners first to prevent duplicates
-    menuBtn.replaceWith(menuBtn.cloneNode(true));
-    collectionsBtn.replaceWith(collectionsBtn.cloneNode(true));
-
-    const newMenuBtn = document.getElementById('menuBtn');
-    const newCollectionsBtn = document.getElementById('collectionsBtn');
-
     // Toggle main menu
-    newMenuBtn.addEventListener('click', () => {
+    menuBtn.onclick = () => {
       verticalMenu.classList.toggle('show');
-
+      
       // Always close submenu when main menu toggles
       submenu.style.maxHeight = "0px";
       lowerMenu.style.transform = "translateY(0px)";
-    });
+    };
 
     // Toggle submenu under Collections
-    newCollectionsBtn.addEventListener('click', (e) => {
+    collectionsBtn.onclick = (e) => {
       e.preventDefault();
       const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== "0px";
       if (isOpen) {
@@ -409,21 +401,22 @@ function initMobileMenu() {
         submenu.style.maxHeight = submenu.scrollHeight + "px";
         lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
       }
-    });
+    };
   }
 }
 
 // Initialize menu on page load
 window.addEventListener('load', initMobileMenu);
 
-// Re-initialize menu if window is resized (for rotation)
+// Re-initialize menu on window resize (for rotation)
 window.addEventListener('resize', () => {
-  verticalMenu.classList.remove('show'); // hide menu if rotated
+  verticalMenu.classList.remove('show'); // hide menu
   submenu.style.maxHeight = "0px";
   lowerMenu.style.transform = "translateY(0px)";
   initMobileMenu();
 });
 </script>
+
 
 
 
