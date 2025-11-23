@@ -174,8 +174,8 @@ for(let j=1; j<=TOTAL_IMAGES; j++){
   const img=document.createElement('img');
   
   // Use thumbnail for gallery display (loads faster)
-  img.dataset.src=`thumbs/${j}.jpg`; // Lazy load attribute
-  img.dataset.fullSrc=`images/${j}.jpg`; // Full res for lightbox
+  img.dataset.src=`thumbs/${j}.webp`; // Lazy load attribute
+  img.dataset.fullSrc=`images/${j}.webp`; // Full res for lightbox
   img.alt=`${text} Photo ${j}`;
   img.loading = "lazy"; // Native browser lazy loading
   
