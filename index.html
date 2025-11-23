@@ -375,44 +375,56 @@ const collectionsBtn = document.getElementById('collectionsBtn');
 const submenu = document.getElementById('submenu');
 const lowerMenu = document.getElementById('lowerMenu');
 
-function setupMobileMenu() {
+let menuOpen = false;
+let submenuOpen = false;
+
+function updateMenuVisibility() {
   const isMobile = window.innerWidth <= 1024 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
   if (!isMobile) {
-    // Reset desktop menu
+    // Reset for desktop
     verticalMenu.classList.remove('show');
     submenu.style.maxHeight = "0px";
     lowerMenu.style.transform = "translateY(0px)";
+    menuOpen = false;
+    submenuOpen = false;
     return;
   }
 
-  // Use addEventListener instead of onclick to avoid losing previous listeners
-  menuBtn.addEventListener('click', () => {
-    verticalMenu.classList.toggle('show');
-    // Always close submenu when main menu toggles
-    submenu.style.maxHeight = "0px";
-    lowerMenu.style.transform = "translateY(0px)";
-  });
-
-  collectionsBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== "0px";
-    if (isOpen) {
-      submenu.style.maxHeight = "0px";
-      lowerMenu.style.transform = "translateY(0px)";
+  // Main menu toggle
+  menuBtn.onclick = () => {
+    menuOpen = !menuOpen;
+    if (menuOpen) {
+      verticalMenu.classList.add('show');
     } else {
+      verticalMenu.classList.remove('show');
+      submenu.style.maxHeight = "0px"; // close submenu when menu closes
+      lowerMenu.style.transform = "translateY(0px)";
+      submenuOpen = false;
+    }
+  };
+
+  // Submenu toggle
+  collectionsBtn.onclick = (e) => {
+    e.preventDefault();
+    submenuOpen = !submenuOpen;
+    if (submenuOpen) {
       submenu.style.maxHeight = submenu.scrollHeight + "px";
       lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
+    } else {
+      submenu.style.maxHeight = "0px";
+      lowerMenu.style.transform = "translateY(0px)";
     }
-  });
+  };
 }
 
 // Initialize menu on load
-window.addEventListener('load', setupMobileMenu);
+window.addEventListener('load', updateMenuVisibility);
 
-// Re-run on resize (for iPad rotation)
-window.addEventListener('resize', setupMobileMenu);
+// Handle rotation / resize
+window.addEventListener('resize', updateMenuVisibility);
 </script>
+
 
 
 
