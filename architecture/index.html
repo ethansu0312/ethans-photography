@@ -60,17 +60,23 @@ h1 {
     align-items: center;           /* center vertically */
     transform: scaleY(1.5);        /* slightly less stretch */
   }
-  .gallery { padding: 50px; }      /* reduce gap between title and images */
+  .gallery { 
+    padding: 50px;
+    column-fill: auto;             /* fix: makes columns start evenly */
+  }
 }
 
 /* Mobile-only adjustments for Architecture title (under 768px) */
 @media screen and (max-width: 768px) {
   #category-title {
-    height: 50vh;               /* make the container shorter */
-    align-items: center !important; /* vertically center the text in the new height */
+    height: 30vh;                      /* reduced from 50vh - less space between title and images */
+    align-items: center !important;    /* vertically center the text in the new height */
     transform: scaleY(1.7) !important; /* keep your vertical stretch */
   }
-  .gallery { padding: 50px 20px; } /* reduce gap between title and images, smaller side padding */
+  .gallery { 
+    padding: 30px 20px;                /* reduced top padding from 50px to 30px - smaller gap */
+    column-fill: auto;                 /* fix: makes columns start evenly */
+  }
 }
 </style>
 </head>
