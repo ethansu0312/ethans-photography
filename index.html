@@ -380,6 +380,34 @@ if (window.innerWidth <= 768) {
 
 
 </script>
+<script>
+const verticalMenu = document.querySelector('.vertical-menu');
+const menuBtn = document.getElementById('menuBtn');
+const collectionsBtn = document.getElementById('collectionsBtn');
+const submenu = document.getElementById('submenu');
+const lowerMenu = document.getElementById('lowerMenu');
+
+// MOBILE ONLY
+if (window.innerWidth <= 768) {
+  // Mobile menu button toggle
+  menuBtn.addEventListener('click', () => {
+    verticalMenu.classList.toggle('show');
+  });
+
+  // Mobile submenu toggle
+  collectionsBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== "0px";
+    if (isOpen) {
+      submenu.style.maxHeight = "0px";
+      lowerMenu.style.transform = "translateY(0px)";
+    } else {
+      submenu.style.maxHeight = submenu.scrollHeight + "px";
+      lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
+    }
+  });
+}
+</script>
 
 </body>
 </html>
