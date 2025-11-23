@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Personal Projects - Ethan's Photography</title>
+<title>Archive - Ethan's Photography</title>
 <style>
 @font-face { font-family:'CategoryFont'; src:url('../fonts/BebasNeue-Regular.ttf') format('truetype'); }
 body { margin:0; font-family:sans-serif; background-color:#000; color:#fff; }
@@ -18,16 +18,70 @@ h1 { text-align:center; padding:20px 0; margin:0; text-transform:capitalize; }
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  transform: scaleY(1.7);       /* stretches the text vertically */
+  transform: scaleY(1.7);
 }
 .gallery { column-count:4; column-gap:15px; padding:100px; }
-.gallery img { width:100%; margin-bottom:15px; border-radius:8px; transition:transform 0.3s; display:block; cursor:pointer; }
+.gallery img { 
+  width:100%; 
+  margin-bottom:15px; 
+  border-radius:8px; 
+  transition:transform 0.3s, opacity 0.3s; 
+  display:block; 
+  cursor:pointer;
+  opacity: 0;
+}
+.gallery img.loaded { opacity: 1; }
 .gallery img:hover { transform:scale(1.05); }
+
+.img-placeholder {
+  background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 @media (max-width:1200px){ .gallery{column-count:3;} }
 @media (max-width:900px){ .gallery{column-count:2;} }
-@media (max-width:600px){ .gallery{column-count:1;} }
-#lightbox { position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.75); display:none; justify-content:center; align-items:center; z-index:9999; cursor:zoom-out; }
-#lightbox img { max-width:90%; max-height:90%; border-radius:10px; box-shadow:0 0 30px rgba(0,0,0,0.8); }
+@media (max-width:600px){ .gallery{column-count:2;} }
+
+#lightbox { 
+  position:fixed; 
+  top:0; 
+  left:0; 
+  width:100%; 
+  height:100%; 
+  background-color:rgba(0,0,0,0.9); 
+  display:none; 
+  justify-content:center; 
+  align-items:center; 
+  z-index:9999; 
+  cursor:zoom-out; 
+}
+#lightbox img { 
+  max-width:90%; 
+  max-height:90%; 
+  border-radius:10px; 
+  box-shadow:0 0 30px rgba(0,0,0,0.8); 
+}
+.lightbox-loader {
+  position: absolute;
+  border: 4px solid #333;
+  border-top: 4px solid #fff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Back button styling */
 .back-button {
     position: fixed;
@@ -45,19 +99,27 @@ h1 { text-align:center; padding:20px 0; margin:0; text-transform:capitalize; }
 /* iPad-specific adjustments (768px to 1366px) */
 @media screen and (min-width: 769px) and (max-width: 1366px) {
   #category-title {
-    font-size: 15vw;               /* smaller font to prevent overlap */
-    height: 40vh;                  /* reduce height */
-    align-items: center;           /* center vertically */
-    transform: scaleY(1.5);        /* slightly less stretch */
+    font-size: 15vw;
+    height: 40vh;
+    align-items: center;
+    transform: scaleY(1.5);
+  }
+  .gallery { 
+    padding: 50px;
+    column-fill: auto;             /* fix: makes columns start evenly */
   }
 }
 
-/* Mobile-only adjustments for Architecture title */
+/* Mobile-only adjustments */
 @media screen and (max-width: 768px) {
   #category-title {
-    height: 50vh;               /* make the container shorter */
-    align-items: center !important; /* vertically center the text in the new height */
+    height: 30vh;                      /* reduced from 50vh - less space between title and images */
+    align-items: center !important;    /* vertically center the text in the new height */
     transform: scaleY(1.7) !important; /* keep your vertical stretch */
+  }
+  .gallery { 
+    padding: 30px 20px;                /* reduced top padding from 50px to 30px - smaller gap */
+    column-fill: auto;                 /* fix: makes columns start evenly */
   }
 }
 </style>
@@ -66,7 +128,10 @@ h1 { text-align:center; padding:20px 0; margin:0; text-transform:capitalize; }
 <a href="../index.html" class="back-button">← Back</a>
 <h1 id="category-title"></h1>
 <div class="gallery" id="gallery"></div>
-<div id="lightbox"><img src="" alt="Enlarged Photo"></div>
+<div id="lightbox">
+  <div class="lightbox-loader"></div>
+  <img src="" alt="Enlarged Photo">
+</div>
 <script>
 const title=document.getElementById('category-title');
 const text="archive";
@@ -83,17 +148,73 @@ function typeWriterSmooth(){
     } 
 }
 window.addEventListener('DOMContentLoaded', typeWriterSmooth);
+
 const gallery=document.querySelector('#gallery');
 const lightbox=document.getElementById('lightbox');
 const lightboxImg=lightbox.querySelector('img');
-for(let j=1;j<=20;j++){
+const lightboxLoader=lightbox.querySelector('.lightbox-loader');
+
+// ===== CONFIGURATION: Set your total number of images here =====
+const TOTAL_IMAGES = 200; // Change this to however many images you have
+// ================================================================
+
+// Create lazy-loaded images
+for(let j=1; j<=TOTAL_IMAGES; j++){
   const img=document.createElement('img');
-  img.src=`images/${j}.jpg`;
+  
+  // Use thumbnail for gallery display (loads faster)
+  img.dataset.src=`thumbs/${j}.jpg`; // Lazy load attribute
+  img.dataset.fullSrc=`images/${j}.jpg`; // Full res for lightbox
   img.alt=`${text} Photo ${j}`;
-  img.addEventListener('click',()=>{ lightbox.style.display='flex'; lightboxImg.src=img.src; });
+  img.loading = "lazy"; // Native browser lazy loading
+  
+  // Click handler for lightbox
+  img.addEventListener('click', function() {
+    lightbox.style.display='flex';
+    lightboxLoader.style.display='block';
+    lightboxImg.style.display='none';
+    
+    // Load full resolution image in lightbox
+    const fullImg = new Image();
+    fullImg.onload = function() {
+      lightboxImg.src = fullImg.src;
+      lightboxImg.style.display='block';
+      lightboxLoader.style.display='none';
+    };
+    fullImg.src = this.dataset.fullSrc;
+  });
+  
   gallery.appendChild(img);
 }
-lightbox.addEventListener('click',()=>{ lightbox.style.display='none'; });
+
+// Intersection Observer for lazy loading with fade-in effect
+const imageObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const img = entry.target;
+      // Load the thumbnail
+      img.src = img.dataset.src;
+      img.onload = () => {
+        img.classList.add('loaded'); // Fade in
+      };
+      observer.unobserve(img); // Stop observing once loaded
+    }
+  });
+}, {
+  rootMargin: '50px' // Start loading 50px before image enters viewport
+});
+
+// Observe all images
+document.querySelectorAll('.gallery img').forEach(img => {
+  imageObserver.observe(img);
+});
+
+// Close lightbox
+lightbox.addEventListener('click', ()=>{ 
+  lightbox.style.display='none';
+  lightboxImg.src = ''; // Clear to save memory
+});
+
 // Fade back button when title scrolls out of view
 const backButton = document.querySelector('.back-button');
 const observer = new IntersectionObserver(
