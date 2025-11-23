@@ -27,6 +27,7 @@ h1 {
   justify-content: center;
   align-items: flex-end;
   transform: scaleY(1.7);
+  padding-top: 80px;
 }
 .gallery { 
   column-count:4; 
@@ -44,7 +45,6 @@ h1 {
 }
 .gallery img.loaded { opacity: 1; }
 .gallery img:hover { transform:scale(1.05); }
-
 .img-placeholder {
   background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
   background-size: 200% 100%;
@@ -56,7 +56,6 @@ h1 {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
-
 #lightbox { 
   position:fixed; 
   top:0; 
@@ -89,7 +88,6 @@ h1 {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-
 .back-button {
     position: fixed;
     top: 30px;
@@ -99,31 +97,33 @@ h1 {
     text-decoration: none;
     font-family: 'CategoryFont', sans-serif;
     transition: color 0.2s, opacity 0.5s;
-    z-index: 10000;  /* Higher than title to prevent overlap */
+    z-index: 10000;
 }
 .back-button:hover {
     color: #ccc;
 }
-
-/* iPad and Computer - 4 columns (anything above 768px) */
-@media screen and (min-width: 769px) {
+/* iPad and Computer - 4 columns (768px and above) */
+@media screen and (min-width: 768px) {
   .gallery { 
     column-count: 4;
     padding: 100px;
   }
+  #category-title {
+    padding-top: 80px;
+  }
 }
-
-/* iPhone only - 2 columns (768px and below) */
-@media screen and (max-width: 768px) {
+/* iPhone only - 2 columns (below 768px) */
+@media screen and (max-width: 767px) {
   #category-title {
     height: 30vh;
-    align-items: center !important;
-    transform: scaleY(1.7) !important;
+    align-items: center;
+    transform: scaleY(1.7);
+    padding-top: 60px;
   }
   .gallery { 
     column-count: 2;
     padding: 30px 20px;
-    column-fill: auto;
+    column-gap: 10px;
   }
 }
 </style>
@@ -152,23 +152,20 @@ function typeWriterSmooth(){
   } 
 }
 window.addEventListener('DOMContentLoaded', typeWriterSmooth);
-
 const gallery=document.querySelector('#gallery');
 const lightbox=document.getElementById('lightbox');
 const lightboxImg=lightbox.querySelector('img');
 const lightboxLoader=lightbox.querySelector('.lightbox-loader');
-
 // ===== CONFIGURATION: Set your total number of images here =====
 const TOTAL_IMAGES = 200; // Change this to however many images you have
 // ================================================================
-
 // Create lazy-loaded images
 for(let j=1; j<=TOTAL_IMAGES; j++){
   const img=document.createElement('img');
   
   // Use thumbnail for gallery display (loads faster)
-  img.dataset.src=`thumbs/${j}.webp`; // Lazy load attribute
-  img.dataset.fullSrc=`images/${j}.webp`; // Full res for lightbox
+  img.dataset.src=`thumbs/${j}.webp`;
+  img.dataset.fullSrc=`images/${j}.webp`;
   img.alt=`${text} Photo ${j}`;
   img.loading = "lazy"; // Native browser lazy loading
   
@@ -190,7 +187,6 @@ for(let j=1; j<=TOTAL_IMAGES; j++){
   
   gallery.appendChild(img);
 }
-
 // Intersection Observer for lazy loading with fade-in effect
 const imageObserver = new IntersectionObserver((entries, observer) => {
   entries.forEach(entry => {
@@ -207,18 +203,15 @@ const imageObserver = new IntersectionObserver((entries, observer) => {
 }, {
   rootMargin: '50px' // Start loading 50px before image enters viewport
 });
-
 // Observe all images
 document.querySelectorAll('.gallery img').forEach(img => {
   imageObserver.observe(img);
 });
-
 // Close lightbox
 lightbox.addEventListener('click', ()=>{ 
   lightbox.style.display='none';
   lightboxImg.src = ''; // Clear to save memory
 });
-
 // Fade back button when title scrolls out of view
 const backButton = document.querySelector('.back-button');
 const observer = new IntersectionObserver(
