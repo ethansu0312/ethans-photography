@@ -376,57 +376,47 @@ const submenu = document.getElementById('submenu');
 const lowerMenu = document.getElementById('lowerMenu');
 
 function isMobile() {
-  return ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 1024;
+  return window.innerWidth <= 1024;
 }
 
-// Show/hide main menu
-menuBtn.addEventListener('click', () => {
-  if (!isMobile()) return; // only on mobile/iPad
-  verticalMenu.classList.toggle('show');
-
-  // Close submenu if main menu closes
-  if (!verticalMenu.classList.contains('show')) {
-    submenu.style.maxHeight = "0px";
-    lowerMenu.style.transform = "translateY(0px)";
-  }
-});
-
-// Toggle submenu under Collections
-collectionsBtn.addEventListener('click', (e) => {
-  if (!isMobile()) return; // only on mobile/iPad
-  e.preventDefault();
-  const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== "0px";
-  if (isOpen) {
-    submenu.style.maxHeight = "0px";
-    lowerMenu.style.transform = "translateY(0px)";
-  } else {
-    submenu.style.maxHeight = submenu.scrollHeight + "px";
-    lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
-  }
-});
-
-// Handle window resize: reset menus if changing device orientation
-window.addEventListener('resize', () => {
+// Mobile menu toggle
+function initMobileMenu() {
   if (!isMobile()) {
-    menuBtn.style.display = "none";
+    menuBtn.style.display = 'none';
     verticalMenu.classList.remove('show');
-    submenu.style.maxHeight = "0px";
-    lowerMenu.style.transform = "translateY(0px)";
-  } else {
-    menuBtn.style.display = "flex";
+    submenu.style.maxHeight = '0px';
+    lowerMenu.style.transform = 'translateY(0px)';
+    return;
   }
-});
 
-// Initialize menu button display on load
-window.addEventListener('load', () => {
-  menuBtn.style.display = isMobile() ? "flex" : "none";
-  verticalMenu.classList.remove('show');
-  submenu.style.maxHeight = "0px";
-  lowerMenu.style.transform = "translateY(0px)";
-});
+  menuBtn.style.display = 'flex';
+
+  menuBtn.onclick = () => {
+    verticalMenu.classList.toggle('show');
+
+    // close submenu if menu closes
+    if (!verticalMenu.classList.contains('show')) {
+      submenu.style.maxHeight = '0px';
+      lowerMenu.style.transform = 'translateY(0px)';
+    }
+  };
+
+  collectionsBtn.onclick = (e) => {
+    e.preventDefault();
+    const isOpen = submenu.style.maxHeight && submenu.style.maxHeight !== '0px';
+    if (isOpen) {
+      submenu.style.maxHeight = '0px';
+      lowerMenu.style.transform = 'translateY(0px)';
+    } else {
+      submenu.style.maxHeight = submenu.scrollHeight + 'px';
+      lowerMenu.style.transform = `translateY(${submenu.scrollHeight}px)`;
+    }
+  };
+}
+
+// Initialize on load and resize
+window.addEventListener('load', initMobileMenu);
+window.addEventListener('resize', initMobileMenu);
 </script>
-
-
-
 </body>
 </html>
