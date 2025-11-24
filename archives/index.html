@@ -184,6 +184,31 @@ h1 {
     color: #ccc;          /* subtle hover effect */
 }
 
+/* Copyright footer styles */
+.copyright-footer {
+  text-align: right;
+  padding: 20px 120px;
+  font-size: 16px;
+  color: #fff;
+  margin-top: 20px;
+  font-family: 'CategoryFont', sans-serif;
+}
+
+/* Mobile copyright adjustments */
+@media (max-width:600px){ 
+  .copyright-footer {
+    padding: 20px 10px;
+    font-size: 10px;
+  }
+}
+
+/* Tablet copyright adjustments */
+@media (min-width:601px) and (max-width:1200px){ 
+  .copyright-footer {
+    padding: 20px 100px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -191,6 +216,11 @@ h1 {
 
 <h1 id="category-title"></h1>
 <div class="gallery" id="gallery"></div>
+
+<!-- Copyright footer -->
+<footer class="copyright-footer">
+  &copy; <span id="current-year"></span> Ethan Su - All rights reserved
+</footer>
 
 <div id="lightbox">
   <div class="spinner"></div>
@@ -208,6 +238,9 @@ h1 {
 </div>
 
 <script>
+// Update copyright year
+document.getElementById('current-year').textContent = new Date().getFullYear();
+
 const title = document.getElementById('category-title');
 const text = "archives";
 let i=0;

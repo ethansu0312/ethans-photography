@@ -106,6 +106,16 @@
 
   .lower-menu { display:flex; flex-direction:column; transition: transform .5s ease; }
 
+  /* Copyright footer styles */
+  .copyright-footer {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.7);
+    z-index: 10;
+  }
+
   /* MOBILE & TABLET STYLES - Updated to include iPads */
   @media screen and (max-width: 1366px) {
     .hero::before { display: none !important; }
@@ -146,6 +156,13 @@
     .vertical-menu { top: calc(50% - 160px); }
 
     #lowerMenu { transition: transform .5s ease; }
+
+    /* Adjust copyright for mobile to avoid overlap with menu button */
+    .copyright-footer {
+      bottom: 10px;
+      right: 10px;
+      font-size: 10px;
+    }
   }
 
   /* iPad-specific styles (larger text for tablets) */
@@ -181,11 +198,19 @@
       <a href="connect/index.html" class="menu-item">Connect</a>
     </div>
   </div>
+
+  <!-- Copyright footer -->
+  <footer class="copyright-footer">
+    &copy; <span id="current-year"></span> Ethan Su - All rights reserved
+  </footer>
 </div>
 
 <!-- ===== JS: clean, single source of truth for desktop/mobile ===== -->
 <script>
 (function() {
+  // Update copyright year
+  document.getElementById('current-year').textContent = new Date().getFullYear();
+
   // element refs
   const verticalMenu = document.querySelector('.vertical-menu');
   const hoverZone = document.querySelector('.hover-zone');
