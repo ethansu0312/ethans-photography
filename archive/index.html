@@ -50,14 +50,23 @@ h1 { text-align:center; padding:20px 0; margin:0; text-transform:capitalize; }
 /* Phone only - 600px and below */
 @media (max-width:600px){ 
   .gallery{
-    column-count: 2 !important;
-    column-gap: 10px;
-    padding: 30px 10px;
-    column-fill: balance !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 10px !important;
+    padding: 30px 10px !important;
+    column-count: unset !important;
+    align-items: flex-start !important;
+  }
+  .gallery .column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
   }
   .gallery img {
-    break-inside: avoid;
-    page-break-inside: avoid;
+    width: 100% !important;
+    height: auto !important;
+    margin-bottom: 0 !important;
   }
   #category-title {
     padding-bottom: 20px;
@@ -114,12 +123,41 @@ window.addEventListener('DOMContentLoaded', typeWriterSmooth);
 const gallery=document.querySelector('#gallery');
 const lightbox=document.getElementById('lightbox');
 const lightboxImg=lightbox.querySelector('img');
+// Create columns for mobile masonry
+const isMobile = window.innerWidth <= 600;
+let columns = [];
+let columnHeights = [];
+
+if(isMobile) {
+  // Create 2 columns for mobile
+  for(let c=0; c<2; c++) {
+    const col = document.createElement('div');
+    col.className = 'column';
+    gallery.appendChild(col);
+    columns.push(col);
+    columnHeights.push(0);
+  }
+}
+
 for(let j=1;j<=20;j++){
   const img=document.createElement('img');
   img.src=`images/${j}.jpg`;
   img.alt=`${text} Photo ${j}`;
   img.addEventListener('click',()=>{ lightbox.style.display='flex'; lightboxImg.src=img.src; });
-  gallery.appendChild(img);
+  
+  if(isMobile) {
+    // Wait for image to load to get its height
+    img.onload = function() {
+      // Find shortest column
+      const shortestIndex = columnHeights.indexOf(Math.min(...columnHeights));
+      // Add image to shortest column
+      columns[shortestIndex].appendChild(img);
+      // Update that column's height
+      columnHeights[shortestIndex] += img.height;
+    };
+  } else {
+    gallery.appendChild(img);
+  }
 }
 lightbox.addEventListener('click',()=>{ lightbox.style.display='none'; });
 
