@@ -42,9 +42,18 @@ h1 {
 
 /* Tablet only - fix title spacing (601px to 1200px) */
 @media (min-width:601px) and (max-width:1200px){ 
+  .gallery {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 15px !important;
+    column-count: unset !important;
+  }
+  .gallery img {
+    grid-column: auto;
+  }
   #category-title {
-    padding-bottom: 50px !important;
-    margin-bottom: 30px !important;
+    padding-bottom: 20px !important;
+    margin-bottom: 10px !important;
     height: 25vh !important;
     padding-top: 100px !important;
     align-items: center !important;
