@@ -5,25 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Travels - Ethan's Photography</title>
 <style>
-@font-face { font-family:'CategoryFont'; src:url('../fonts/BebasNeue-Regular.ttf') format('truetype'); }
+
+@font-face {
+  font-family: 'CategoryFont';
+  src: url('../fonts/BebasNeue-Regular.ttf') format('truetype');
+}
 body { margin:0; font-family:sans-serif; background-color:#000; color:#fff; }
-h1 { text-align:center; padding:20px 0; margin:0; text-transform:capitalize; }
+
+h1 { 
+  text-align:center; 
+  padding:0; 
+  margin:0; 
+  text-transform:capitalize; 
+}
+
+/* Updated title styling */
 #category-title { 
   font-family:'CategoryFont', sans-serif; 
   white-space:nowrap; 
   overflow:hidden; 
   border-right:2px solid #fff; 
   font-size:19.8vw;            
-  height:51vh;               
+  height:55vh;               
   display: flex;
   justify-content: center;
   align-items: flex-end;
   transform: scaleY(1.7);       /* stretches the text vertically */
 }
 
+
 .gallery { column-count:4; column-gap:15px; padding:100px; }
-.gallery img { width:100%; margin-bottom:15px; border-radius:8px; transition:transform 0.3s; display:block; cursor:pointer; }
-.gallery img:hover { transform:scale(1.05); }
+.gallery img { 
+  width:100%; 
+  margin-bottom:15px; 
+  border-radius:8px; 
+  transition:transform 0.5s, box-shadow 0.5s;
+  display:block; 
+  cursor:pointer; 
+  position: relative;
+}
+.gallery img:hover { 
+  transform:scale(1.15); 
+  box-shadow: 0 20px 100px rgba(0, 0, 0, 0.9);
+  z-index: 100;
+}
 @media (max-width:1200px){ .gallery{column-count:3;} }
 @media (max-width:900px){ .gallery{column-count:2;} }
 
@@ -87,45 +112,39 @@ h1 { text-align:center; padding:20px 0; margin:0; text-transform:capitalize; }
 #lightbox { position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.75); display:none; justify-content:center; align-items:center; z-index:9999; cursor:zoom-out; }
 #lightbox img { max-width:90%; max-height:90%; border-radius:10px; box-shadow:0 0 30px rgba(0,0,0,0.8); }
 
-/* Back button styling */
 .back-button {
-    position: fixed;
-    top: 30px;
-    left: 30px;
-    font-size: 2rem;
-    color: #fff;
-    text-decoration: none;
-    font-family: 'CategoryFont', sans-serif;
-    transition: color 0.2s, opacity 0.3s;
-    z-index: 1000;
+    position: fixed;      /* stays in place as you scroll */
+    top: 30px;            /* adjust distance from top */
+    left: 30px;           /* adjust distance from left */
+    font-size: 2rem;      /* adjust size */
+    color: #fff;          /* arrow color */
+    text-decoration: none;/* remove underline */
+    font-family: 'CategoryFont', sans-serif; /* optional: match title font */
+    transition: color 0.2s, opacity 0.5s; /* added opacity transition */
+    z-index: 1000;        /* ensures it stays above images */
 }
-.back-button:hover { color: #ccc; }
+
+.back-button:hover {
+    color: #ccc;          /* subtle hover effect */
+}
 
 </style>
 </head>
 <body>
-
 <a href="../index.html" class="back-button">← Back</a>
 
 <h1 id="category-title"></h1>
 <div class="gallery" id="gallery"></div>
+
 <div id="lightbox"><img src="" alt="Enlarged Photo"></div>
 
 <script>
-const title=document.getElementById('category-title');
-const text="Travels";
+const title = document.getElementById('category-title');
+const text = "Travels";
 let i=0;
 const totalDuration=1200;
 const speed=totalDuration/text.length;
-function typeWriterSmooth(){ 
-    if(i<text.length){ 
-        title.textContent=text.substring(0,i+1)+"_"; 
-        i++; 
-        setTimeout(typeWriterSmooth,speed); 
-    } else { 
-        title.textContent=text; 
-    } 
-}
+function typeWriterSmooth(){ if(i<text.length){ title.textContent=text.substring(0,i+1)+"_"; i++; setTimeout(typeWriterSmooth,speed); } else { title.textContent=text; } }
 window.addEventListener('DOMContentLoaded', typeWriterSmooth);
 
 const gallery=document.querySelector('#gallery');
@@ -159,24 +178,44 @@ if(isMobile) {
 
 for(let j=1;j<=20;j++){
   const img=document.createElement('img');
-  img.src=`images/${j}.jpg`;
+  img.dataset.src=`thumbnails/${j}.webp`;  // Thumbnail for gallery
+  img.dataset.fullSrc=`images/${j}.webp`;   // Full-res for lightbox
   img.alt=`${text} Photo ${j}`;
-  img.addEventListener('click',()=>{ lightbox.style.display='flex'; lightboxImg.src=img.src; });
+  img.loading = "lazy";  // Native browser lazy loading
+  
+  img.addEventListener('click',()=>{ 
+    lightbox.style.display='flex'; 
+    lightboxImg.src=img.dataset.fullSrc;  // Load full resolution in lightbox
+  });
   
   if(isMobile || isTablet) {
-    // Wait for image to load to get its height
     img.onload = function() {
-      // Find shortest column
       const shortestIndex = columnHeights.indexOf(Math.min(...columnHeights));
-      // Add image to shortest column
       columns[shortestIndex].appendChild(img);
-      // Update that column's height
       columnHeights[shortestIndex] += img.height;
     };
   } else {
     gallery.appendChild(img);
   }
 }
+
+// Lazy load images
+const imageObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const img = entry.target;
+      img.src = img.dataset.src;  // Load the thumbnail
+      imageObserver.unobserve(img);  // Stop observing once loaded
+    }
+  });
+}, {
+  rootMargin: '50px'  // Start loading 50px before image enters viewport
+});
+
+// Observe all images
+document.querySelectorAll('.gallery img').forEach(img => {
+  imageObserver.observe(img);
+});
 lightbox.addEventListener('click',()=>{ lightbox.style.display='none'; });
 
 // Fade back button when title scrolls out of view
@@ -195,6 +234,7 @@ const observer = new IntersectionObserver(
   },
   { threshold: 0 } // triggers as soon as any part of the title is out of view
 );
+
 observer.observe(title);
 
 </script>

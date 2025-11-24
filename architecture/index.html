@@ -35,8 +35,20 @@ h1 {
 
 
 .gallery { column-count:4; column-gap:15px; padding:100px; }
-.gallery img { width:100%; margin-bottom:15px; border-radius:8px; transition:transform 0.3s; display:block; cursor:pointer; }
-.gallery img:hover { transform:scale(1.05); }
+.gallery img { 
+  width:100%; 
+  margin-bottom:15px; 
+  border-radius:8px; 
+  transition:transform 0.5s, box-shadow 0.5s;
+  display:block; 
+  cursor:pointer; 
+  position: relative;
+}
+.gallery img:hover { 
+  transform:scale(1.15); 
+  box-shadow: 0 20px 100px rgba(0, 0, 0, 0.9);
+  z-index: 100;
+}
 @media (max-width:1200px){ .gallery{column-count:3;} }
 @media (max-width:900px){ .gallery{column-count:2;} }
 
@@ -166,24 +178,44 @@ if(isMobile) {
 
 for(let j=1;j<=20;j++){
   const img=document.createElement('img');
-  img.src=`images/${j}.jpg`;
+  img.dataset.src=`thumbnails/${j}.webp`;  // Thumbnail for gallery
+  img.dataset.fullSrc=`images/${j}.webp`;   // Full-res for lightbox
   img.alt=`${text} Photo ${j}`;
-  img.addEventListener('click',()=>{ lightbox.style.display='flex'; lightboxImg.src=img.src; });
+  img.loading = "lazy";  // Native browser lazy loading
+  
+  img.addEventListener('click',()=>{ 
+    lightbox.style.display='flex'; 
+    lightboxImg.src=img.dataset.fullSrc;  // Load full resolution in lightbox
+  });
   
   if(isMobile || isTablet) {
-    // Wait for image to load to get its height
     img.onload = function() {
-      // Find shortest column
       const shortestIndex = columnHeights.indexOf(Math.min(...columnHeights));
-      // Add image to shortest column
       columns[shortestIndex].appendChild(img);
-      // Update that column's height
       columnHeights[shortestIndex] += img.height;
     };
   } else {
     gallery.appendChild(img);
   }
 }
+
+// Lazy load images
+const imageObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const img = entry.target;
+      img.src = img.dataset.src;  // Load the thumbnail
+      imageObserver.unobserve(img);  // Stop observing once loaded
+    }
+  });
+}, {
+  rootMargin: '50px'  // Start loading 50px before image enters viewport
+});
+
+// Observe all images
+document.querySelectorAll('.gallery img').forEach(img => {
+  imageObserver.observe(img);
+});
 lightbox.addEventListener('click',()=>{ lightbox.style.display='none'; });
 
 // Fade back button when title scrolls out of view
