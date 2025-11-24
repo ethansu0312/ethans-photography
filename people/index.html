@@ -30,12 +30,23 @@ h1 { text-align:center; padding:20px 0; margin:0; text-transform:capitalize; }
 /* Tablet only - 601px to 1200px */
 @media (min-width:601px) and (max-width:1200px){ 
   .gallery {
-    column-count: 3 !important;
-    column-fill: balance !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 15px !important;
+    padding: 100px !important;
+    column-count: unset !important;
+    align-items: flex-start !important;
+  }
+  .gallery .column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1;
   }
   .gallery img {
-    break-inside: avoid;
-    page-break-inside: avoid;
+    width: 100% !important;
+    height: auto !important;
+    margin-bottom: 0 !important;
   }
   #category-title {
     padding-bottom: 20px !important;
@@ -123,14 +134,24 @@ window.addEventListener('DOMContentLoaded', typeWriterSmooth);
 const gallery=document.querySelector('#gallery');
 const lightbox=document.getElementById('lightbox');
 const lightboxImg=lightbox.querySelector('img');
-// Create columns for mobile masonry
+// Create columns for mobile and tablet masonry
 const isMobile = window.innerWidth <= 600;
+const isTablet = window.innerWidth > 600 && window.innerWidth <= 1200;
 let columns = [];
 let columnHeights = [];
 
 if(isMobile) {
   // Create 2 columns for mobile
   for(let c=0; c<2; c++) {
+    const col = document.createElement('div');
+    col.className = 'column';
+    gallery.appendChild(col);
+    columns.push(col);
+    columnHeights.push(0);
+  }
+} else if(isTablet) {
+  // Create 3 columns for tablet
+  for(let c=0; c<3; c++) {
     const col = document.createElement('div');
     col.className = 'column';
     gallery.appendChild(col);
@@ -145,7 +166,7 @@ for(let j=1;j<=20;j++){
   img.alt=`${text} Photo ${j}`;
   img.addEventListener('click',()=>{ lightbox.style.display='flex'; lightboxImg.src=img.src; });
   
-  if(isMobile) {
+  if(isMobile || isTablet) {
     // Wait for image to load to get its height
     img.onload = function() {
       // Find shortest column
