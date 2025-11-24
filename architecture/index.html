@@ -40,16 +40,15 @@ h1 {
 @media (max-width:1200px){ .gallery{column-count:3;} }
 @media (max-width:900px){ .gallery{column-count:2;} }
 
-/* Tablet only - fix title spacing (601px to 1200px) */
+/* Tablet only - 601px to 1200px */
 @media (min-width:601px) and (max-width:1200px){ 
   .gallery {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 15px !important;
-    column-count: unset !important;
+    column-count: 3 !important;
+    column-fill: balance !important;
   }
   .gallery img {
-    grid-column: auto;
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
   #category-title {
     padding-bottom: 20px !important;
@@ -64,14 +63,14 @@ h1 {
 /* Phone only - 600px and below */
 @media (max-width:600px){ 
   .gallery{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    column-count: 2 !important;
+    column-gap: 10px;
     padding: 30px 10px;
-    column-count: unset;
+    column-fill: balance !important;
   }
   .gallery img {
-    grid-column: auto;
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
   #category-title {
     padding-bottom: 20px;
