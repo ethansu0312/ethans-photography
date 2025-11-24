@@ -63,17 +63,23 @@ h1 {
 /* Phone only - 600px and below */
 @media (max-width:600px){ 
   .gallery{
-    column-count: 2 !important;
-    column-gap: 10px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 10px !important;
     padding: 30px 10px !important;
-    column-fill: auto !important;
+    column-count: unset !important;
+    align-items: flex-start !important;
+  }
+  .gallery .column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
   }
   .gallery img {
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-    -webkit-column-break-inside: avoid !important;
-    display: block !important;
-    margin-bottom: 10px !important;
+    width: 100% !important;
+    height: auto !important;
+    margin-bottom: 0 !important;
   }
   #category-title {
     padding-bottom: 20px;
@@ -124,12 +130,32 @@ window.addEventListener('DOMContentLoaded', typeWriterSmooth);
 const gallery=document.querySelector('#gallery');
 const lightbox=document.getElementById('lightbox');
 const lightboxImg=lightbox.querySelector('img');
+// Create columns for mobile masonry
+const isMobile = window.innerWidth <= 600;
+let columns = [];
+
+if(isMobile) {
+  // Create 2 columns for mobile
+  for(let c=0; c<2; c++) {
+    const col = document.createElement('div');
+    col.className = 'column';
+    gallery.appendChild(col);
+    columns.push(col);
+  }
+}
+
 for(let j=1;j<=20;j++){
   const img=document.createElement('img');
   img.src=`images/${j}.jpg`;
   img.alt=`${text} Photo ${j}`;
   img.addEventListener('click',()=>{ lightbox.style.display='flex'; lightboxImg.src=img.src; });
-  gallery.appendChild(img);
+  
+  if(isMobile) {
+    // Distribute images evenly across columns (alternating)
+    columns[j % 2].appendChild(img);
+  } else {
+    gallery.appendChild(img);
+  }
 }
 lightbox.addEventListener('click',()=>{ lightbox.style.display='none'; });
 
