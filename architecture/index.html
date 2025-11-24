@@ -64,13 +64,16 @@ h1 {
 @media (max-width:600px){ 
   .gallery{
     column-count: 2 !important;
-    column-gap: 10px;
-    padding: 30px 10px;
-    column-fill: balance !important;
+    column-gap: 10px !important;
+    padding: 30px 10px !important;
+    column-fill: auto !important;
   }
   .gallery img {
-    break-inside: avoid;
-    page-break-inside: avoid;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    -webkit-column-break-inside: avoid !important;
+    display: block !important;
+    margin-bottom: 10px !important;
   }
   #category-title {
     padding-bottom: 20px;
