@@ -133,7 +133,6 @@ const lightboxImg=lightbox.querySelector('img');
 // Create columns for mobile masonry
 const isMobile = window.innerWidth <= 600;
 let columns = [];
-let columnHeights = [];
 
 if(isMobile) {
   // Create 2 columns for mobile
@@ -142,7 +141,6 @@ if(isMobile) {
     col.className = 'column';
     gallery.appendChild(col);
     columns.push(col);
-    columnHeights.push(0);
   }
 }
 
@@ -153,26 +151,8 @@ for(let j=1;j<=20;j++){
   img.addEventListener('click',()=>{ lightbox.style.display='flex'; lightboxImg.src=img.src; });
   
   if(isMobile) {
-    // First two images: place one in each column (left, right)
-    if(j === 1) {
-      columns[0].appendChild(img);
-    } else if(j === 2) {
-      columns[1].appendChild(img);
-    } else {
-      // Remaining images: wait for load and add to shortest column
-      img.onload = function() {
-        const shortestIndex = columnHeights.indexOf(Math.min(...columnHeights));
-        columns[shortestIndex].appendChild(img);
-        columnHeights[shortestIndex] += img.height;
-      };
-    }
-    
-    // Track heights for first two images as well
-    if(j <= 2) {
-      img.onload = function() {
-        columnHeights[j-1] = img.height;
-      };
-    }
+    // Distribute images evenly across columns (alternating)
+    columns[j % 2].appendChild(img);
   } else {
     gallery.appendChild(img);
   }
